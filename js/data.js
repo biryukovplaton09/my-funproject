@@ -66,14 +66,14 @@ window.PLAYERS = [
   },
   {
     id: 6, number: 10, name: "Роман Юдин", position: "Центральный атакующий полузащитник", short: "ЦАП", instagram: "yudin_obman", photo: "images/players/6.jpg",
-    nickname: "Алкаш", born: 2008, foot: "Обе", prevClub: "Рубин (РПЛ)",
+    nickname: "Алкаш", born: 2008, foot: "Обе", nationality: "Англия", flag: "en", prevClub: "Рубин (РПЛ)",
     favPlayer: "Букайо Сака", favClub: "Арсенал", trait: "Может в одиночку обыграть всех 11",
     bio: "Пришёл в FC Durum из «Рубина» — по клубной легенде, оттуда его выгнали за слишком бурные вечеринки. Говорят, однажды Рома выиграл матч после такой ночи в одиночку. А ещё он забил хет-трик «Барселоне», перепутав её с «Локомотивом», и на пресс-конференции выдал: «Это ваша Барса? Бомжи».",
     stats: { goals: 10, assists: 11 },
     awards: [{ title: "Золотой мяч", season: "2025/26", kind: "ball" }, { title: "Лучший бомбардир АПЛ", season: "2023/24" }],
   },
 
-  // Анкета (необязательно): nickname, born (год), foot, nationality + flag (код страны: de, es, fr, it, pt, br, ar, gb, ru, il, kz, tr, us; два флага — ["ru", "il"]), prevClub, favPlayer, favClub, trait,
+  // Анкета (необязательно): nickname, born (год), foot, nationality + flag (код страны: de, es, fr, it, pt, br, ar, gb, en (Англия), ru, il, kz, tr, us; два флага — ["ru", "il"]), prevClub, favPlayer, favClub, trait,
   // stats: { goals, assists } — за текущий сезон во всех турнирах.
   // awards — индивидуальные награды; kind: "ball" — значок Золотого мяча.
   // Бывшие игроки: former: true — показываются отдельным блоком в «Составе»

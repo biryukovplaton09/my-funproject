@@ -24,6 +24,7 @@
     gb: '<rect width="3" height="3" fill="#012169"/><path d="M0 0 3 3M3 0 0 3" stroke="#fff" stroke-width=".6"/><path d="M0 0 3 3M3 0 0 3" stroke="#C8102E" stroke-width=".25"/><path d="M1.5 0v3M0 1.5h3" stroke="#fff" stroke-width=".8"/><path d="M1.5 0v3M0 1.5h3" stroke="#C8102E" stroke-width=".45"/>',
     kz: '<rect width="3" height="3" fill="#00AFCA"/><circle cx="1.5" cy="1.3" r=".45" fill="#FEC50C"/><path d="M1 2.05q.5-.3 1 0" stroke="#FEC50C" stroke-width=".12" fill="none"/>',
     tr: '<rect width="3" height="3" fill="#E30A17"/><circle cx="1.25" cy="1.5" r=".65" fill="#fff"/><circle cx="1.42" cy="1.5" r=".52" fill="#E30A17"/><circle cx="2.05" cy="1.5" r=".18" fill="#fff"/>',
+    en: '<rect width="3" height="3" fill="#fff"/><rect x="1.2" width=".6" height="3" fill="#CE1124"/><rect y="1.2" width="3" height=".6" fill="#CE1124"/>',
     il: '<rect width="3" height="3" fill="#fff"/><rect y=".35" width="3" height=".35" fill="#0038B8"/><rect y="2.3" width="3" height=".35" fill="#0038B8"/><path d="M1.5 1 1.86 1.62H1.14zM1.5 2 1.14 1.38h.72z" fill="none" stroke="#0038B8" stroke-width=".09"/>',
     us: '<rect width="3" height="3" fill="#B22234"/><path d="M0 .35h3M0 .8h3M0 1.25h3M0 1.7h3M0 2.15h3M0 2.6h3" stroke="#fff" stroke-width=".22"/><rect width="1.3" height="1.5" fill="#3C3B6E"/>',
   };
