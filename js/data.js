@@ -26,7 +26,13 @@ window.CLUB = {
 
 // photo: путь к фото, например "images/players/1.jpg". Если фото нет — показывается заглушка с номером.
 window.PLAYERS = [
-  { id: 1, number: 1,  name: "Павел Григориади",  position: "Вратарь",  instagram: "p.grigoriadii", photo: "images/players/1.jpg", bio: "" },
+  {
+    id: 1, number: 1, name: "Павел Григориади", position: "Вратарь", instagram: "p.grigoriadii", photo: "images/players/1.jpg",
+    nickname: "Бургер", born: 2008, foot: "Правая", nationality: "Германия", flag: "🇩🇪", prevClub: "Бавария",
+    favPlayer: "Мануэль Нойер", favClub: "Бавария", trait: "Пенальтист",
+    bio: "Пришёл в FC Durum из «Баварии». Вратарём стал случайно: однажды отбил удар лицом — и с тех пор из ворот его уже не выпускали. При этом Павел ещё и штатный пенальтист команды.",
+    stats: { goals: 1, assists: 2, note: "Гол — с пенальти" },
+  },
   { id: 2, number: 6,  name: "Тимур Хегай",       position: "Защитник", instagram: "xegaii", photo: "images/players/2.jpg", bio: "",
     awards: [{ title: "Лучший ассистент мира", season: "2024/25" }] },
   { id: 3, number: 4,  name: "Платон Бирюков",    position: "Защитник", instagram: "biriukov_platon", photo: "images/players/3.jpg", bio: "",
@@ -37,10 +43,12 @@ window.PLAYERS = [
   { id: 6, number: 10, name: "Роман Юдин",        position: "Центральный атакующий полузащитник", short: "ЦАП", instagram: "yudin_obman", photo: "images/players/6.jpg", bio: "",
     awards: [{ title: "Золотой мяч", season: "2025/26", kind: "ball" }, { title: "Лучший бомбардир АПЛ", season: "2023/24" }] },
 
+  // Анкета (необязательно): nickname, born (год), foot, nationality + flag, prevClub, favPlayer, favClub, trait,
+  // stats: { goals, assists } — за текущий сезон.
   // awards — индивидуальные награды; kind: "ball" — значок Золотого мяча.
   // Бывшие игроки: former: true — показываются отдельным блоком в «Составе»
   {
-    id: 7, number: null, name: "Альмир Дё", position: null, instagram: "alm1r.d", photo: "images/players/7.jpg", former: true,
+    id: 7, number: 8, name: "Альмир Дё", position: "Левый вингер", instagram: "alm1r.d", photo: "images/players/7.jpg", former: true,
     transfer: "Шанхай Юнайтед",
     bio: "Лучший бомбардир FC Durum в сезоне 2025/26. В нынешнее трансферное окно перешёл в «Шанхай Юнайтед».",
     honors: ["3× чемпион АПЛ (2023/24, 2024/25, 2025/26)", "2× финалист ЛЧ (2023/24, 2024/25)", "Лучший бомбардир команды 2025/26"],

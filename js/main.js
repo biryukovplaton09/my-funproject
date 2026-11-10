@@ -53,7 +53,7 @@
     const balls = awardsOf(p).filter((a) => a.kind === "ball").length, total = awardsOf(p).length;
     const badge = total ? `<span class="player__badge${balls ? " gold" : ""}" title="Индивидуальные награды">${balls ? BALL : CUP}${balls ? `${balls}× ЗМ` : total}</span>` : "";
     return `<a class="player" href="#player-${p.id}">${playerPic(p).replace(/<\/div>$/, `${badge}</div>`)}
-      <div class="player__info"><b>${esc(p.name)}${isCaptain(p) ? ` <span class="cap" title="Капитан">C</span>` : ""}</b><span>${p.former ? `→ ${esc(p.transfer || "покинул клуб")}` : esc(p.position)}</span></div></a>`;
+      <div class="player__info"><b>${esc(p.name)}${isCaptain(p) ? ` <span class="cap" title="Капитан">C</span>` : ""}</b>${p.nickname ? `<em class="nick">«${esc(p.nickname)}»</em>` : ""}<span>${p.former ? `→ ${esc(p.transfer || "покинул клуб")}` : esc(p.position)}</span></div></a>`;
   }
 
   // Сыгранный матч из LEAGUE.results с точки зрения FC Durum
@@ -239,12 +239,21 @@
       p.number != null && ["Номер", p.number],
       isCaptain(p) && ["Роль", "Капитан и тренер"],
       p.position && ["Позиция", p.position],
+      p.nickname && ["Прозвище", `«${p.nickname}»`],
+      p.born && ["Год рождения", p.born],
+      p.nationality && ["Национальность", `${p.flag ? p.flag + " " : ""}${p.nationality}`],
+      p.foot && ["Рабочая нога", p.foot],
+      p.trait && ["Фишка", p.trait],
+      p.prevClub && ["Прошлый клуб", p.prevClub],
+      p.favPlayer && ["Любимый игрок", p.favPlayer],
+      p.favClub && ["Любимый клуб", p.favClub],
       p.former && ["Статус", "Бывший игрок"],
       p.transfer && ["Новый клуб", p.transfer],
     ].filter(Boolean);
     return `<div class="profile">${playerPic(p)}<div class="profile__body"><span class="label">${p.former ? "Бывший игрок" : esc(p.position)}</span>
         <h1>${esc(p.name)}</h1><dl class="facts">${facts.map(([k, v]) => `<div><dt>${k}</dt><dd>${esc(v)}</dd></div>`).join("")}</dl>
         ${p.bio ? `<p>${esc(p.bio)}</p>` : ""}
+        ${p.stats ? `<h3 class="sub">Сезон ${esc(LEAGUE.season)}</h3><div class="pstats"><div><b>${p.stats.goals || 0}</b><span>${plural(p.stats.goals || 0, "гол", "гола", "голов")}</span></div><div><b>${p.stats.assists || 0}</b><span>${plural(p.stats.assists || 0, "передача", "передачи", "передач")}</span></div>${p.stats.note ? `<small class="meta">${esc(p.stats.note)}</small>` : ""}</div>` : ""}
         ${p.instagram ? `<a class="ig" href="${igUrl(p.instagram)}" target="_blank" rel="noopener">${IG}<span>@${esc(p.instagram)}</span></a>` : ""}
         ${awardsOf(p).length ? `<h3 class="sub">Индивидуальные награды</h3><ul class="honors">${awardsOf(p).map((a) => `<li class="${a.kind === "ball" ? "is-ball" : ""}"><span class="trophy__cup">${awardIcon(a)}</span><span>${esc(a.title)} <small>${esc(a.season)}</small></span></li>`).join("")}</ul>` : ""}
         ${p.honors && p.honors.length ? `<h3 class="sub">Достижения</h3><ul class="honors">${p.honors.map((h) => `<li><span class="trophy__cup">${CUP}</span>${esc(h)}</li>`).join("")}</ul>` : ""}

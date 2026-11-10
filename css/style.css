@@ -331,3 +331,12 @@ img.comment__ava { object-fit: cover; }
 .trophy__note { color: var(--muted); font-size: .78rem; }
 .ucl-row small strong { color: var(--text); }
 .derby { display: inline-block; font: 800 .62rem var(--font-body); text-transform: uppercase; letter-spacing: .08em; color: #fff; background: var(--ink); border: 1px solid var(--red); padding: 2px 6px; border-radius: 4px; vertical-align: 2px; }
+
+/* Player questionnaire */
+.nick { font-style: normal; color: var(--red); font-size: .82rem; font-weight: 700; }
+.pstats { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 0 0 16px; }
+.pstats div { display: flex; align-items: baseline; gap: 6px; background: var(--ink); color: var(--on-ink); padding: 8px 14px; border-radius: 8px; }
+.pstats b { font-family: var(--font-display); font-size: 1.5rem; font-variant-numeric: tabular-nums; color: #fff; }
+.pstats span { font-size: .85rem; color: #c9c1bf; }
+.profile .facts { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
+.profile__body .ig { margin-right: 100%; }
