@@ -10,6 +10,7 @@
     { id: "news", name: "Новости" },
     { id: "team", name: "Состав" },
     { id: "table", name: "Таблица" },
+    { id: "ucl", name: "ЛЧ" },
     { id: "matches", name: "Матчи" },
     { id: "club", name: "О клубе" },
   ];
@@ -55,9 +56,11 @@
     return `<div class="match match--${cls}"><span class="when">${r.round}-й тур · <b>${label}</b></span>
       <span class="team">${esc(r.home)}</span><span class="res">${hg} : ${ag}</span><span class="team">${esc(r.away)}</span></div>`;
   }
+  const TBD = "Соперник определяется";
   function upcomingRow(m) {
-    const home = m.home ? CLUB.name : m.opponent, away = m.home ? m.opponent : CLUB.name;
-    return `<div class="match match--upcoming"><time class="when">${fmtDate(m.date)}</time>
+    const opp = m.opponent || TBD;
+    const home = m.home ? CLUB.name : opp, away = m.home ? opp : CLUB.name;
+    return `<div class="match match--upcoming"><time class="when">${m.tournament ? `${esc(m.tournament)} · ` : ""}${fmtDate(m.date)}</time>
       <span class="team">${esc(home)}</span><span class="res">—</span><span class="team">${esc(away)}</span></div>`;
   }
   const ourResults = () => LEAGUE.results.filter((r) => r.home === CLUB.name || r.away === CLUB.name).sort((a, b) => b.round - a.round);
@@ -87,9 +90,19 @@
   const formDots = (f) => `<span class="form">${f.slice(-5).map((x) => `<i class="f-${x}" title="${FORM[x]}">${FORM[x]}</i>`).join("")}</span>`;
 
   function trophiesBlock() {
+    const finals = UCL.history.filter((h) => h.stage === "Финал");
     return `<div class="trophies">${TROPHIES.map((t) => `<div class="trophy"><span class="trophy__cup">${CUP}</span>
-      <b>${esc(t.title)}</b><span>${esc(t.season)}</span></div>`).join("")}</div>`;
+      <b>${esc(t.title)}</b><span>${esc(t.season)}</span></div>`).join("")}
+      ${finals.map((h) => `<div class="trophy trophy--silver"><span class="trophy__cup">${CUP}</span>
+      <b>Финалист ${esc(UCL.short)}</b><span>${h.season ? esc(h.season) : esc(UCL.name)}</span></div>`).join("")}</div>`;
   }
+
+  function daysUntil(iso) {
+    const d = new Date(iso + (iso.length === 10 ? "T00:00:00" : "")), now = new Date();
+    now.setHours(0, 0, 0, 0);
+    return Math.round((d - now) / 86400000);
+  }
+  const plural = (n, a, b, c) => { const m10 = n % 10, m100 = n % 100; return m10 === 1 && m100 !== 11 ? a : m10 >= 2 && m10 <= 4 && (m100 < 12 || m100 > 14) ? b : c; };
 
   // ---------- Страницы ----------
   const views = {
@@ -115,6 +128,24 @@
           <thead><tr><th>#</th><th class="tname">Команда</th><th title="Игры">И</th><th title="Победы">В</th><th title="Ничьи">Н</th><th title="Поражения">П</th><th class="goals" title="Забито–пропущено">Мячи</th><th title="Разница мячей">±</th><th title="Очки">О</th><th class="formcol">Форма</th></tr></thead>
           <tbody>${rows}</tbody></table></div>
         <p class="meta">При равенстве очков выше команда с лучшей разницей мячей, затем — с большим числом забитых.</p>`;
+    },
+    ucl() {
+      const nx = UCL.next, left = daysUntil(nx.date);
+      const finals = UCL.history.filter((h) => h.stage === "Финал").length;
+      return `<h1 class="page-title">${esc(UCL.name)}</h1><p class="page-sub">${esc(CLUB.name)} в ${esc(UCL.short)} · ${finals} ${plural(finals, "финал", "финала", "финалов")} в истории</p>
+        <div class="ucl-next">
+          <div><span class="label">Следующий этап</span><h2>${esc(nx.title)}</h2>
+            <p class="ucl-date">${new Date(nx.date + "T00:00:00").toLocaleDateString("ru-RU", { day: "numeric", month: "long", year: "numeric" })}</p></div>
+          ${left >= 0 ? `<div class="countdown"><b>${left}</b><span>${plural(left, "день", "дня", "дней")}<br>до старта</span></div>` : ""}
+        </div>
+        <h2 class="section-title">Матчи</h2>
+        ${nx.matches.length ? `<div class="matches">${nx.matches.map(upcomingRow).join("")}</div>`
+          : `<div class="matches"><div class="match match--upcoming"><span class="when">${esc(UCL.short)} · ${fmtDate(nx.date)}</span>
+              <span class="team">${esc(CLUB.name)}</span><span class="res">—</span><span class="team tbd">${TBD}</span></div></div>
+             <p class="meta">Пары и время матчей пока не определены. Как только станет известно — расписание появится здесь.</p>`}
+        <h2 class="section-title">История в ЛЧ</h2>
+        <div class="ucl-history">${UCL.history.map((h) => `<div class="ucl-row"><span class="trophy__cup silver">${CUP}</span>
+            <div><b>${esc(h.stage)}</b><small>${h.season ? esc(h.season) : "Сезон уточняется"}</small></div><span class="pill pill--loss">${esc(h.result)}</span></div>`).join("")}</div>`;
     },
     matches() {
       const up = [...MATCHES].sort((a, b) => a.date.localeCompare(b.date));
@@ -166,7 +197,9 @@
       <section class="widget club-card"><img src="${EMBLEM}" alt=""><b>${esc(CLUB.name)}</b><small>${esc(CLUB.tagline)}</small>
         <span class="kit"><i></i> Форма: ${esc(CLUB.colors.toLowerCase())}</span></section>
       <section class="widget"><h2>Трофеи</h2><div class="trophy-line"><span class="trophy__cup">${CUP}</span>
-        <div><b>${TROPHIES.length}× чемпион ${esc(LEAGUE.name)}</b><br><small>${TROPHIES.map((t) => esc(t.season)).join(" · ")}</small></div></div></section>
+        <div><b>${TROPHIES.length}× чемпион ${esc(LEAGUE.name)}</b><br><small>${TROPHIES.map((t) => esc(t.season)).join(" · ")}</small></div></div>
+        <div class="trophy-line"><span class="trophy__cup silver">${CUP}</span>
+        <div><b>${UCL.history.filter((h) => h.stage === "Финал").length}× финалист ${esc(UCL.short)}</b><br><small><a href="#ucl">${esc(UCL.short)}: следующий этап ${fmtDate(UCL.next.date)}</a></small></div></div></section>
       <section class="widget"><h2>${esc(LEAGUE.name)} ${esc(LEAGUE.season)}</h2><table class="mini-table"><tbody>${(() => {
         const st = standings(); const i = st.findIndex((t) => t.name === CLUB.name);
         const from = Math.max(0, Math.min(i - 2, st.length - 5));
@@ -180,7 +213,7 @@
       })()}</section>
       <section class="widget"><h2>Следующий матч</h2>${(() => {
         const m = [...MATCHES].sort((a, b) => a.date.localeCompare(b.date))[0];
-        return m ? `<b>${esc(CLUB.name)} — ${esc(m.opponent)}</b><br><time>${fmtDate(m.date)}</time>` : `<span class="meta">Пока не назначен</span>`;
+        return m ? `<b>${esc(CLUB.name)} — ${esc(m.opponent || TBD)}</b><br><time>${m.tournament ? `${esc(m.tournament)} · ` : ""}${fmtDate(m.date)}</time>` : `<span class="meta">Пока не назначен</span>`;
       })()}</section>`;
   }
 

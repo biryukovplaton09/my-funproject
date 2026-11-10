@@ -41,9 +41,12 @@ window.NEWS = [
   },
 ];
 
-// Ближайшие матчи FC Durum (сыгранные берутся из LEAGUE.results автоматически).
-// { date: "2026-11-20T18:00:00", opponent: "FC Shegly", home: true }
-window.MATCHES = [];
+// Ближайшие матчи FC Durum (сыгранные матчи АПЛ берутся из LEAGUE.results автоматически).
+// { date: "2026-11-20T18:00:00", tournament: "АПЛ", opponent: "FC Shegly", home: true }
+// opponent: null — соперник ещё не определён.
+window.MATCHES = [
+  { date: "2027-01-31", tournament: "ЛЧ", opponent: null, home: true },
+];
 
 // Трофеи клуба
 window.TROPHIES = [
@@ -109,4 +112,17 @@ window.LEAGUE = {
     { round: 3, home: "FC Lepeshka", away: "FC Manty", score: "3:1" },
     { round: 3, home: "Kumis Wanderers", away: "FC Shegly", score: "0:1" },
   ],
+};
+
+// Лига чемпионов (ЛЧ)
+window.UCL = {
+  name: "Лига чемпионов",
+  short: "ЛЧ",
+  // История выступлений. season — можно вписать сезон, например "2024/25".
+  history: [
+    { season: null, stage: "Финал", result: "Поражение" },
+    { season: null, stage: "Финал", result: "Поражение" },
+  ],
+  // Ближайший этап. matches — пары; пока соперники не определены, список пуст.
+  next: { date: "2027-01-31", title: "Матчи Лиги чемпионов", matches: [] },
 };
