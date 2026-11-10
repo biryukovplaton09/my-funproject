@@ -10,16 +10,19 @@
   --max: 1200px;
 }
 @media (prefers-color-scheme: dark) {
-  :root { --bg: #0d1117; --surface: #161b22; --text: #e6edf3; --muted: #8b949e; --border: #30363d; }
+  :root:not([data-theme="light"]) { --bg: #0d1117; --surface: #161b22; --text: #e6edf3; --muted: #8b949e; --border: #30363d; color-scheme: dark; }
 }
+:root[data-theme="dark"] { --bg: #0d1117; --surface: #161b22; --text: #e6edf3; --muted: #8b949e; --border: #30363d; color-scheme: dark; }
 * { box-sizing: border-box; }
 body { margin: 0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; background: var(--bg); color: var(--text); line-height: 1.5; }
 a { color: inherit; text-decoration: none; }
 a:hover { color: var(--accent); }
-.container { max-width: var(--max); margin: 0 auto; padding: 0 16px; }
+.container { max-width: var(--max); margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.layout > * { min-width: 0; }
 
 /* Header */
-.header { background: var(--dark); color: #fff; position: sticky; top: 0; z-index: 10; }
+.header { background: var(--dark); color: #fff; position: sticky; top: env(safe-area-inset-top, 0px); z-index: 10; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--dark); }
 .header__row { display: flex; align-items: center; gap: 24px; height: 60px; }
 .logo { font-weight: 800; font-size: 1.4rem; letter-spacing: -.5px; }
 .logo span { color: var(--accent); }
@@ -36,7 +39,7 @@ a:hover { color: var(--accent); }
 .section-title { font-size: 1.25rem; margin: 32px 0 16px; padding-left: 10px; border-left: 4px solid var(--accent); }
 
 /* Covers (заглушки вместо фото) */
-.cover { aspect-ratio: 16/9; display: grid; place-items: center; font-size: 3rem; border-radius: var(--radius) var(--radius) 0 0; }
+.cover { max-width: 100%; aspect-ratio: 16/9; display: grid; place-items: center; font-size: 3rem; border-radius: var(--radius) var(--radius) 0 0; }
 .cover--big { font-size: 6rem; border-radius: var(--radius); }
 .cover--football { background: linear-gradient(135deg, #16a34a, #065f46); }
 .cover--hockey { background: linear-gradient(135deg, #38bdf8, #1e3a8a); }
@@ -99,7 +102,7 @@ time, .meta { color: var(--muted); font-size: .82rem; }
   .menu-btn { display: block; }
   .nav { display: none; position: absolute; top: 60px; left: 0; right: 0; flex-direction: column; background: var(--dark); padding: 8px 16px 16px; }
   .nav-open .nav { display: flex; }
-  .hero .cover { aspect-ratio: 16/9; font-size: 3.5rem; border-radius: var(--radius) var(--radius) 0 0; }
+  .hero .cover { max-width: 100%; aspect-ratio: 16/9; font-size: 3.5rem; border-radius: var(--radius) var(--radius) 0 0; }
   .hero__text { position: static; background: var(--dark); }
   .article { padding: 18px; }
 }
