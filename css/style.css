@@ -387,3 +387,17 @@ img.comment__ava { object-fit: cover; }
 .tabs a.on { background: var(--red); color: #fff; }
 .tabs a.on span { color: rgba(255,255,255,.8); }
 .squad--academy .player__pic { background: linear-gradient(180deg, var(--surface-2), #241b1b); }
+
+/* Article figure & call-ups */
+.article__fig { margin: 0; }
+.article__fig img { width: 100%; max-height: 560px; object-fit: cover; }
+.article__fig figcaption { padding: 8px 28px 0; font-size: .85rem; color: var(--muted); }
+.callups { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; margin: 0 0 20px; }
+.callup { position: relative; display: grid; gap: 2px; padding: 0 0 12px; background: var(--ink); color: var(--on-ink); border-radius: var(--radius); overflow: hidden; text-align: center; transition: transform .15s; }
+.callup:hover { transform: translateY(-3px); color: var(--on-ink); }
+.callup__pic { width: 100%; aspect-ratio: 1; object-fit: cover; object-position: top; margin-bottom: 8px; mask-image: linear-gradient(#000 70%, transparent); }
+.callup__flag { position: absolute; top: 10px; right: 10px; width: 42px; height: 28px; }
+.callup__team { font: 800 .72rem var(--font-body); text-transform: uppercase; letter-spacing: .12em; color: var(--gold); }
+.callup b { font-family: var(--font-display); font-size: .9rem; color: #fff; padding: 0 8px; }
+.callup small { color: #a39b99; font-size: .78rem; }
+@media (prefers-reduced-motion: reduce) { .callup { transition: none; } .callup:hover { transform: none; } }
