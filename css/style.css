@@ -182,7 +182,7 @@ time, .meta { color: var(--muted); font-size: .82rem; font-variant-numeric: tabu
 @media (prefers-reduced-motion: reduce) { .card, .player { transition: none; } .card:hover, .player:hover { transform: none; } }
 
 /* Trophies */
-.trophies { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px; }
+.trophies { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; }
 .trophy { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px 16px; display: grid; justify-items: center; text-align: center; gap: 4px; }
 .trophy b { font-family: var(--font-display); font-size: .92rem; }
 .trophy span:last-child { color: var(--muted); font-variant-numeric: tabular-nums; }
@@ -263,3 +263,22 @@ time, .meta { color: var(--muted); font-size: .82rem; font-variant-numeric: tabu
 .honors li { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 10px; align-items: center; font-weight: 600; }
 .honors svg { width: 22px; height: 22px; }
 .cover img.photo { object-position: center 22%; }
+
+/* Individual awards */
+.player__pic { position: relative; }
+.player__badge { position: absolute; right: 8px; bottom: 8px; display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px 3px 5px; border-radius: 999px; background: rgba(11,10,10,.82); color: #fff; font-size: .74rem; font-weight: 800; }
+.player__badge svg { width: 16px; height: 16px; color: var(--gold); }
+.player__badge.gold { background: var(--gold); color: #1a1406; }
+.player__badge.gold svg { color: #1a1406; }
+.sub { font-size: .78rem; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); margin: 4px 0 10px; font-family: var(--font-body); font-weight: 800; }
+.honors small { color: var(--muted); font-weight: 600; font-variant-numeric: tabular-nums; }
+.honors .trophy__cup, .awards .trophy__cup { color: var(--gold); }
+.awards { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; }
+.award-card { display: grid; grid-template-columns: 72px minmax(0, 1fr); gap: 14px; align-items: start; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px; transition: border-color .15s; }
+.award-card:hover { border-color: var(--red); color: inherit; }
+.award-card img { width: 72px; height: 90px; object-fit: cover; object-position: top; border-radius: 6px; }
+.award-card b { font-family: var(--font-display); font-size: .95rem; }
+.award-card ul { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 6px; font-size: .9rem; }
+.award-card li { display: grid; grid-template-columns: 20px minmax(0, 1fr); gap: 8px; align-items: start; font-weight: 600; }
+.award-card li svg { width: 20px; height: 20px; }
+.award-card small { color: var(--muted); font-weight: 600; font-variant-numeric: tabular-nums; }

@@ -16,12 +16,17 @@ window.CLUB = {
 // photo: путь к фото, например "images/players/1.jpg". Если фото нет — показывается заглушка с номером.
 window.PLAYERS = [
   { id: 1, number: 1,  name: "Павел Григориади",  position: "Вратарь",  photo: "images/players/1.jpg", bio: "" },
-  { id: 2, number: 6,  name: "Тимур Хегай",       position: "Защитник", photo: "images/players/2.jpg", bio: "" },
-  { id: 3, number: 4,  name: "Платон Бирюков",    position: "Защитник", photo: "images/players/3.jpg", bio: "" },
+  { id: 2, number: 6,  name: "Тимур Хегай",       position: "Защитник", photo: "images/players/2.jpg", bio: "",
+    awards: [{ title: "Лучший ассистент мира", season: "2024/25" }] },
+  { id: 3, number: 4,  name: "Платон Бирюков",    position: "Защитник", photo: "images/players/3.jpg", bio: "",
+    awards: [{ title: "Лучший защитник мира", season: "2025/26" }, { title: "Лучший защитник ЛЧ", season: "2024/25" }] },
   { id: 4, number: 11, name: "Везир Мирзоев",     position: "Вингер",   photo: "images/players/4.jpg", bio: "" },
-  { id: 5, number: 7,  name: "Дэниэль Шаламов",   position: "Вингер",   photo: "images/players/5.jpg", bio: "" },
-  { id: 6, number: 10, name: "Роман Юдин",        position: "Центральный атакующий полузащитник", short: "ЦАП", photo: "images/players/6.jpg", bio: "" },
+  { id: 5, number: 7,  name: "Дэниэль Шаламов",   position: "Вингер",   photo: "images/players/5.jpg", bio: "",
+    awards: [{ title: "Золотой мяч", season: "2023/24", kind: "ball" }, { title: "Золотой мяч", season: "2024/25", kind: "ball" }, { title: "Лучший игрок ЛЧ", season: "2024/25" }, { title: "Лучший бомбардир АПЛ", season: "2024/25" }] },
+  { id: 6, number: 10, name: "Роман Юдин",        position: "Центральный атакующий полузащитник", short: "ЦАП", photo: "images/players/6.jpg", bio: "",
+    awards: [{ title: "Золотой мяч", season: "2025/26", kind: "ball" }, { title: "Лучший бомбардир АПЛ", season: "2023/24" }] },
 
+  // awards — индивидуальные награды; kind: "ball" — значок Золотого мяча.
   // Бывшие игроки: former: true — показываются отдельным блоком в «Составе»
   {
     id: 7, number: null, name: "Альмир Дё", position: null, photo: "images/players/7.jpg", former: true,

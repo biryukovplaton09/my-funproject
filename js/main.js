@@ -44,7 +44,9 @@
         <h3><a href="#news-${n.id}">${esc(n.title)}</a></h3><p>${esc(n.excerpt)}</p></div></article>`;
   }
   function playerCard(p) {
-    return `<a class="player" href="#player-${p.id}">${playerPic(p)}
+    const balls = awardsOf(p).filter((a) => a.kind === "ball").length, total = awardsOf(p).length;
+    const badge = total ? `<span class="player__badge${balls ? " gold" : ""}" title="Индивидуальные награды">${balls ? BALL : CUP}${balls ? `${balls}× ЗМ` : total}</span>` : "";
+    return `<a class="player" href="#player-${p.id}">${playerPic(p).replace(/<\/div>$/, `${badge}</div>`)}
       <div class="player__info"><b>${esc(p.name)}</b><span>${p.former ? `→ ${esc(p.transfer || "покинул клуб")}` : esc(p.position)}</span></div></a>`;
   }
 
@@ -70,6 +72,17 @@
   const CUP = `<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M18 8h28v14c0 9-6 16-14 16s-14-7-14-16V8z" fill="currentColor"/>
     <path d="M18 12H9v5c0 6 4 10 10 11M46 12h9v5c0 6-4 10-10 11" fill="none" stroke="currentColor" stroke-width="4"/>
     <rect x="28" y="38" width="8" height="10" fill="currentColor"/><rect x="20" y="48" width="24" height="7" rx="2" fill="currentColor"/></svg>`;
+
+  const BALL = `<svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="26" r="20" fill="currentColor"/>
+    <path d="M32 14l7 5-3 8h-8l-3-8z" fill="rgba(0,0,0,.28)"/><path d="M20 52h24l-3-8H23z" fill="currentColor"/><rect x="16" y="52" width="32" height="6" rx="2" fill="currentColor"/></svg>`;
+  const awardIcon = (a) => (a.kind === "ball" ? BALL : CUP);
+  const awardsOf = (p) => p.awards || [];
+  // «2× Золотой мяч» — группировка одинаковых наград
+  function awardSummary(p) {
+    const g = {};
+    awardsOf(p).forEach((a) => (g[a.title] = g[a.title] || { ...a, n: 0, seasons: [] }, g[a.title].n++, g[a.title].seasons.push(a.season)));
+    return Object.values(g);
+  }
 
   function standings() {
     const t = {};
@@ -168,7 +181,11 @@
           <div>${CLUB.about.map((p) => `<p>${esc(p)}</p>`).join("")}
             <dl class="facts"><div><dt>Титулов АПЛ</dt><dd>${TROPHIES.length}</dd></div><div><dt>Игроков</dt><dd>${squad().length}</dd></div><div><dt>Форма</dt><dd>${esc(CLUB.colors)}</dd></div><div><dt>Статус</dt><dd>Любители</dd></div></dl>
           </div></div>
-        <h2 class="section-title">Трофеи</h2>${trophiesBlock()}`;
+        <h2 class="section-title">Трофеи</h2>${trophiesBlock()}
+        <h2 class="section-title">Индивидуальные награды</h2>
+        <div class="awards">${PLAYERS.filter((p) => awardsOf(p).length).sort((a, b) => awardsOf(b).length - awardsOf(a).length).map((p) => `<a class="award-card" href="#player-${p.id}">
+            ${p.photo ? `<img src="${esc(p.photo)}" alt="" loading="lazy">` : ""}
+            <div><b>${esc(p.name)}</b><ul>${awardSummary(p).map((a) => `<li class="${a.kind === "ball" ? "is-ball" : ""}"><span class="trophy__cup">${awardIcon(a)}</span><span>${a.n > 1 ? `${a.n}× ` : ""}${esc(a.title)} <small>${a.seasons.map(esc).join(", ")}</small></span></li>`).join("")}</ul></div></a>`).join("")}</div>`;
     },
   };
 
@@ -198,7 +215,8 @@
     return `<div class="profile">${playerPic(p)}<div class="profile__body"><span class="label">${p.former ? "Бывший игрок" : esc(p.position)}</span>
         <h1>${esc(p.name)}</h1><dl class="facts">${facts.map(([k, v]) => `<div><dt>${k}</dt><dd>${esc(v)}</dd></div>`).join("")}</dl>
         ${p.bio ? `<p>${esc(p.bio)}</p>` : ""}
-        ${p.honors && p.honors.length ? `<ul class="honors">${p.honors.map((h) => `<li><span class="trophy__cup">${CUP}</span>${esc(h)}</li>`).join("")}</ul>` : ""}
+        ${awardsOf(p).length ? `<h3 class="sub">Индивидуальные награды</h3><ul class="honors">${awardsOf(p).map((a) => `<li class="${a.kind === "ball" ? "is-ball" : ""}"><span class="trophy__cup">${awardIcon(a)}</span><span>${esc(a.title)} <small>${esc(a.season)}</small></span></li>`).join("")}</ul>` : ""}
+        ${p.honors && p.honors.length ? `<h3 class="sub">Достижения</h3><ul class="honors">${p.honors.map((h) => `<li><span class="trophy__cup">${CUP}</span>${esc(h)}</li>`).join("")}</ul>` : ""}
         <a class="back" href="#team">← Весь состав</a></div></div>
       ${news.length ? `<h2 class="section-title">Новости об игроке</h2><div class="grid">${news.map(newsCard).join("")}</div>` : ""}`;
   }
