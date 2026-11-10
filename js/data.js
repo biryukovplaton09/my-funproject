@@ -74,7 +74,7 @@ window.PLAYERS = [
   },
 
   // Анкета (необязательно): nickname, born (год), foot, nationality + flag (код страны: de, es, fr, it, pt, br, ar, gb, ru, il, kz, tr, us; два флага — ["ru", "il"]), prevClub, favPlayer, favClub, trait,
-  // stats: { goals, assists } — за текущий сезон.
+  // stats: { goals, assists } — за текущий сезон во всех турнирах.
   // awards — индивидуальные награды; kind: "ball" — значок Золотого мяча.
   // Бывшие игроки: former: true — показываются отдельным блоком в «Составе»
   {
