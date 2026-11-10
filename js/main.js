@@ -45,6 +45,7 @@
   const NAV = [
     { id: "news", name: "Новости" },
     { id: "team", name: "Состав" },
+    { id: "feed", name: "Лента" },
     { id: "table", name: "Таблица" },
     { id: "ucl", name: "ЛЧ" },
     { id: "matches", name: "Матчи" },
@@ -171,6 +172,53 @@
       <div id="lc-root" hidden><div id="lc-list"></div><div id="lc-form" class="lc-form"></div></div></section>`;
   }
 
+  // ---------- Лента ----------
+  const VERIFIED = `<svg class="verified" viewBox="0 0 24 24" aria-label="Подтверждённый аккаунт"><path d="M12 2l2.4 1.8 3-.2.9 2.9 2.5 1.7-1 2.8 1 2.8-2.5 1.7-.9 2.9-3-.2L12 22l-2.4-1.8-3 .2-.9-2.9-2.5-1.7 1-2.8-1-2.8 2.5-1.7.9-2.9 3 .2z" fill="currentColor"/><path d="M8 12.3l2.6 2.6L16.2 9" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+  function postAuthor(a) {
+    if (a === "club") return { name: CLUB.name, handle: "fcdurum", ava: `<img class="post__ava post__ava--club" src="${EMBLEM}" alt="">`, href: "#club", club: true };
+    const p = player(a);
+    if (!p) return { name: "Игрок", handle: "player", ava: `<span class="post__ava"></span>`, href: "#team" };
+    return { name: p.name, handle: p.instagram || ("player" + p.id), p,
+      ava: p.photo ? `<img class="post__ava" src="${esc(p.photo)}" alt="">` : `<span class="post__ava post__ava--num">${esc(p.number)}</span>`,
+      href: `#player-${p.id}` };
+  }
+  function ago(iso) {
+    const d = new Date(iso), diff = (Date.now() - d) / 60000;
+    if (diff < 1) return "сейчас";
+    if (diff < 60) return `${Math.floor(diff)} мин`;
+    if (diff < 1440) return `${Math.floor(diff / 60)} ч`;
+    return d.toLocaleDateString("ru-RU", { day: "numeric", month: "short" });
+  }
+  const linkify = (t) => esc(t).replace(/(^|\s)([#@][\p{L}\p{N}_]+)/gu, '$1<span class="tag">$2</span>').replace(/\n/g, "<br>");
+  function postCard(post, full) {
+    const a = postAuthor(post.author);
+    const replies = (COMMENTS["post-" + post.id] || []).length;
+    return `<article class="post${full ? " post--full" : ""}">
+      <a href="${a.href}">${a.ava}</a>
+      <div class="post__main">
+        <div class="post__head"><a href="${a.href}" class="post__name">${esc(a.name)}</a>${VERIFIED}${a.p ? flagSvg(a.p, "flag flag--mini") : ""}
+          <span class="post__handle">@${esc(a.handle)}</span><span class="post__dot">·</span><time title="${fmtTime(post.date)}">${full ? fmtTime(post.date) : ago(post.date)}</time></div>
+        <div class="post__text">${linkify(post.text)}</div>
+        ${post.image ? `<img class="post__img" src="${esc(post.image)}" alt="" loading="lazy">` : ""}
+        <div class="post__actions">
+          <a href="#post-${post.id}" class="pa pa--reply" title="Ответить"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H8l-4 4z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>${replies || ""}</a>
+          <span class="pa pa--rt" title="Репосты"><svg viewBox="0 0 24 24"><path d="M7 7h10v6M17 17H7v-6M14 4l3 3-3 3M10 20l-3-3 3-3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>${post.reposts || 0}</span>
+          <button type="button" class="pa pa--like" data-post="${post.id}" title="Нравится"><svg viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 017-2.6A4 4 0 0119 10c0 5.6-7 10-7 10z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg><span>${post.likes || 0}</span></button>
+        </div>
+      </div></article>`;
+  }
+  // Лайк — личная отметка посетителя (хранится в его браузере)
+  function likedSet() { try { return new Set(JSON.parse(localStorage.getItem("durum-likes") || "[]")); } catch (e) { return new Set(); } }
+  function bindLikes() {
+    const liked = likedSet();
+    document.querySelectorAll(".pa--like").forEach((b) => {
+      const id = b.dataset.post, base = (POSTS.find((x) => String(x.id) === id) || {}).likes || 0;
+      const paint = () => { const on = liked.has(id); b.classList.toggle("on", on); b.querySelector("span").textContent = base + (on ? 1 : 0); };
+      paint();
+      b.onclick = () => { liked.has(id) ? liked.delete(id) : liked.add(id); try { localStorage.setItem("durum-likes", JSON.stringify([...liked])); } catch (e) {} paint(); };
+    });
+  }
+
   // ---------- Страницы ----------
   const views = {
     news() {
@@ -187,6 +235,12 @@
       return `<h1 class="page-title">Состав</h1><p class="page-sub">${squad().length} игроков в заявке ${esc(CLUB.name)}</p>
         <div class="squad">${squad().map(playerCard).join("")}</div>
         ${ex.length ? `<h2 class="section-title">Бывшие игроки</h2><div class="squad squad--former">${ex.map(playerCard).join("")}</div>` : ""}`;
+    },
+    feed() {
+      const list = [...POSTS].sort((a, b) => b.date.localeCompare(a.date));
+      return `<div class="feed"><div class="feed__top"><h1 class="page-title">Лента</h1><p class="page-sub">Игроки ${esc(CLUB.name)} — от первого лица</p></div>
+        <div class="feed__who">${squad().map((p) => `<a href="#player-${p.id}" title="${esc(p.name)}">${p.photo ? `<img src="${esc(p.photo)}" alt="${esc(p.name)}">` : ""}<span>${esc(p.name.split(" ")[0])}</span></a>`).join("")}</div>
+        ${list.length ? list.map((p) => postCard(p)).join("") : `<div class="empty">Пока здесь тихо. Скоро игроки напишут первые посты.</div>`}</div>`;
     },
     table() {
       const rows = standings().map((t, i) => `<tr class="${t.name === CLUB.name ? "us" : ""}">
@@ -260,6 +314,12 @@
       ${more.length ? `<h2 class="section-title">Читайте также</h2><div class="grid">${more.map(newsCard).join("")}</div>` : ""}`;
   }
 
+  function postView(id) {
+    const post = POSTS.find((x) => x.id === id);
+    if (!post) return `<div class="empty">Пост не найден. <a class="back" href="#feed">← Лента</a></div>`;
+    return `<div class="feed"><a class="back" href="#feed">← Лента</a>${postCard(post, true)}${commentsBlock("post-" + post.id)}</div>`;
+  }
+
   function playerView(id) {
     const p = player(id);
     if (!p) return `<div class="empty">Игрок не найден. <a class="back" href="#team">← Состав</a></div>`;
@@ -288,6 +348,7 @@
         ${p.honors && p.honors.length ? `<h3 class="sub">Достижения</h3><ul class="honors">${p.honors.map((h) => `<li><span class="trophy__cup">${CUP}</span>${esc(h)}</li>`).join("")}</ul>` : ""}
         <a class="back" href="#team">← Весь состав</a></div></div>
       ${news.length ? `<h2 class="section-title">Новости об игроке</h2><div class="grid">${news.map(newsCard).join("")}</div>` : ""}
+      ${POSTS.some((x) => x.author === p.id) ? `<h2 class="section-title">Посты в Ленте</h2><div class="feed">${POSTS.filter((x) => x.author === p.id).sort((a, b) => b.date.localeCompare(a.date)).map((x) => postCard(x)).join("")}</div>` : ""}
       ${commentsBlock("player-" + p.id)}`;
   }
 
@@ -321,11 +382,15 @@
   function route() {
     const h = location.hash.slice(1) || "news";
     let section = h, html;
-    const m = h.match(/^(news|player)-(\d+)$/);
-    if (m) { section = m[1] === "news" ? "news" : "team"; html = m[1] === "news" ? articleView(+m[2]) : playerView(+m[2]); }
+    const m = h.match(/^(news|player|post)-(\d+)$/);
+    if (m) {
+      section = { news: "news", player: "team", post: "feed" }[m[1]];
+      html = { news: articleView, player: playerView, post: postView }[m[1]](+m[2]);
+    }
     else { if (!views[h]) section = "news"; html = views[section](); }
     $("#view").innerHTML = html;
     if (window.LiveComments) { if (m) LiveComments.mount(h); else LiveComments.unmount(); }
+    bindLikes();
     $("#nav").innerHTML = NAV.map((n) => `<a href="#${n.id}" class="${n.id === section ? "active" : ""}">${n.name}</a>`).join("");
     document.body.classList.remove("nav-open");
     window.scrollTo(0, 0);
