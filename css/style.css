@@ -282,3 +282,13 @@ time, .meta { color: var(--muted); font-size: .82rem; font-variant-numeric: tabu
 .award-card li { display: grid; grid-template-columns: 20px minmax(0, 1fr); gap: 8px; align-items: start; font-weight: 600; }
 .award-card li svg { width: 20px; height: 20px; }
 .award-card small { color: var(--muted); font-weight: 600; font-variant-numeric: tabular-nums; }
+
+/* Comments */
+.comments { margin-top: 8px; }
+.comment { display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 12px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; margin-bottom: 10px; }
+.comment__ava { width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; color: #fff; font-weight: 800; font-family: var(--font-display); }
+.comment__head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; }
+.comment__head b { font-size: .95rem; }
+.comment p { margin: 4px 0 8px; overflow-wrap: anywhere; }
+.comment__votes { display: flex; gap: 14px; font-size: .8rem; font-weight: 700; color: var(--muted); font-variant-numeric: tabular-nums; }
+.comment__votes span:first-child { color: var(--win); }

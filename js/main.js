@@ -41,7 +41,8 @@
   function newsCard(n) {
     return `<article class="card"><a href="#news-${n.id}">${cover(n)}</a>
       <div class="card__body"><time>${fmtDate(n.date)}</time>
-        <h3><a href="#news-${n.id}">${esc(n.title)}</a></h3><p>${esc(n.excerpt)}</p></div></article>`;
+        <h3><a href="#news-${n.id}">${esc(n.title)}</a></h3><p>${esc(n.excerpt)}</p>
+        ${(COMMENTS["news-" + n.id] || []).length ? `<span class="meta">💬 ${COMMENTS["news-" + n.id].length}</span>` : ""}</div></article>`;
   }
   function playerCard(p) {
     const balls = awardsOf(p).filter((a) => a.kind === "ball").length, total = awardsOf(p).length;
@@ -118,6 +119,22 @@
     return Math.round((d - now) / 86400000);
   }
   const plural = (n, a, b, c) => { const m10 = n % 10, m100 = n % 100; return m10 === 1 && m100 !== 11 ? a : m10 >= 2 && m10 <= 4 && (m100 < 12 || m100 > 14) ? b : c; };
+
+  // ---------- Комментарии ----------
+  const fmtTime = (iso) => new Date(iso).toLocaleString("ru-RU", { day: "numeric", month: "long", hour: "2-digit", minute: "2-digit" });
+  function avatarColor(name) { let h = 0; for (const c of name) h = (h * 31 + c.charCodeAt(0)) % 360; return `hsl(${h} 45% 42%)`; }
+  function commentsBlock(key) {
+    const list = (window.COMMENTS && COMMENTS[key]) || [];
+    if (!list.length) return "";
+    const n = list.length;
+    return `<section class="comments"><h2 class="section-title">Комментарии · ${n}</h2>
+      ${[...list].sort((a, b) => a.date.localeCompare(b.date)).map((c) => `<article class="comment">
+        <span class="comment__ava" style="background:${avatarColor(c.author)}">${esc(c.author.replace(/[^\p{L}\p{N}]/gu, "").charAt(0).toUpperCase())}</span>
+        <div class="comment__main"><div class="comment__head"><b>${esc(c.author)}</b><time>${fmtTime(c.date)}</time></div>
+          <p>${esc(c.text)}</p>
+          <div class="comment__votes"><span title="Нравится">▲ ${c.likes || 0}</span><span title="Не нравится">▼ ${c.dislikes || 0}</span></div></div>
+      </article>`).join("")}</section>`;
+  }
 
   // ---------- Страницы ----------
   const views = {
@@ -199,6 +216,7 @@
         <div class="article__body"><p class="lead">${esc(n.excerpt)}</p>${n.body.map((p) => `<p>${esc(p)}</p>`).join("")}
         ${tagged.length ? `<div class="chips">${tagged.map((p) => `<a class="chip" href="#player-${p.id}">#${esc(p.number)} ${esc(p.name)}</a>`).join("")}</div>` : ""}
         <a class="back" href="#news">← Все новости</a></div></article>
+      ${commentsBlock("news-" + n.id)}
       ${more.length ? `<h2 class="section-title">Читайте также</h2><div class="grid">${more.map(newsCard).join("")}</div>` : ""}`;
   }
 
@@ -218,7 +236,8 @@
         ${awardsOf(p).length ? `<h3 class="sub">Индивидуальные награды</h3><ul class="honors">${awardsOf(p).map((a) => `<li class="${a.kind === "ball" ? "is-ball" : ""}"><span class="trophy__cup">${awardIcon(a)}</span><span>${esc(a.title)} <small>${esc(a.season)}</small></span></li>`).join("")}</ul>` : ""}
         ${p.honors && p.honors.length ? `<h3 class="sub">Достижения</h3><ul class="honors">${p.honors.map((h) => `<li><span class="trophy__cup">${CUP}</span>${esc(h)}</li>`).join("")}</ul>` : ""}
         <a class="back" href="#team">← Весь состав</a></div></div>
-      ${news.length ? `<h2 class="section-title">Новости об игроке</h2><div class="grid">${news.map(newsCard).join("")}</div>` : ""}`;
+      ${news.length ? `<h2 class="section-title">Новости об игроке</h2><div class="grid">${news.map(newsCard).join("")}</div>` : ""}
+      ${commentsBlock("player-" + p.id)}`;
   }
 
   // ---------- Боковая колонка ----------
