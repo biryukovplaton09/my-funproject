@@ -51,17 +51,23 @@ window.PLAYERS = [
   },
   {
     id: 4, number: 11, name: "Везир Мирзоев", position: "Вингер", instagram: "awanteya", photo: "images/players/4.jpg",
-    nickname: "Бородатый", born: 2008, foot: "Правая", nationality: "Аргентина", flag: "ar", prevClub: "Барселона",
+    nickname: "Бородатый", born: 2008, foot: "Правая", nationality: "Аргентина, Бразилия", flag: ["ar", "br"], prevClub: "Барселона",
     favPlayer: "Ламин Ямаль", favClub: "Барселона", trait: "Навес",
     bio: "Пришёл в FC Durum из «Барселоны». Главное оружие — навес с фланга. А ещё Везир — мастер симуляции: падает так эффектно, что в команде его часто называют «Плавцом» или «Дельфином».",
     stats: { goals: 6, assists: 2 },
   },
-  { id: 5, number: 7,  name: "Дэниэль Шаламов",   position: "Вингер",   instagram: "freyah0", photo: "images/players/5.jpg", bio: "",
-    awards: [{ title: "Золотой мяч", season: "2023/24", kind: "ball" }, { title: "Золотой мяч", season: "2024/25", kind: "ball" }, { title: "Лучший игрок ЛЧ", season: "2024/25" }, { title: "Лучший бомбардир АПЛ", season: "2024/25" }] },
+  {
+    id: 5, number: 7, name: "Дэниэль Шаламов", position: "Вингер", instagram: "freyah0", photo: "images/players/5.jpg",
+    nickname: "Еврей", born: 2008, foot: "Правая", nationality: "Россия, Израиль", flag: ["ru", "il"], prevClub: "Реал Мадрид",
+    favPlayer: "Криштиану Роналду", favClub: "Реал Мадрид", trait: "Пушечный удар",
+    bio: "Пришёл в FC Durum из «Реал Мадрида». Фирменное оружие — пушечный удар: на одном из тренировочных матчей Дэн сломал брату руку. На игры приезжает на «Гелике» — с видом главной звезды лиги.",
+    stats: { goals: 9, assists: 6 },
+    awards: [{ title: "Золотой мяч", season: "2023/24", kind: "ball" }, { title: "Золотой мяч", season: "2024/25", kind: "ball" }, { title: "Лучший игрок ЛЧ", season: "2024/25" }, { title: "Лучший бомбардир АПЛ", season: "2024/25" }],
+  },
   { id: 6, number: 10, name: "Роман Юдин",        position: "Центральный атакующий полузащитник", short: "ЦАП", instagram: "yudin_obman", photo: "images/players/6.jpg", bio: "",
     awards: [{ title: "Золотой мяч", season: "2025/26", kind: "ball" }, { title: "Лучший бомбардир АПЛ", season: "2023/24" }] },
 
-  // Анкета (необязательно): nickname, born (год), foot, nationality + flag (код страны: de, es, fr, it, pt, br, ar, gb, ru, kz, tr, us), prevClub, favPlayer, favClub, trait,
+  // Анкета (необязательно): nickname, born (год), foot, nationality + flag (код страны: de, es, fr, it, pt, br, ar, gb, ru, il, kz, tr, us; два флага — ["ru", "il"]), prevClub, favPlayer, favClub, trait,
   // stats: { goals, assists } — за текущий сезон.
   // awards — индивидуальные награды; kind: "ball" — значок Золотого мяча.
   // Бывшие игроки: former: true — показываются отдельным блоком в «Составе»
