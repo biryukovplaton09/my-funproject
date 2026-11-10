@@ -39,3 +39,12 @@ images/news/        — картинки к новостям
 
 После каждого изменения поднимайте номер `?v=...` у `css/style.css`, `js/data.js`, `js/main.js` в `index.html`,
 иначе браузеры посетителей до 10 минут могут показывать старую версию.
+
+## Живые комментарии (Firebase)
+
+Посетители оставляют комментарии, войдя через Google. Данные хранятся в Firebase (Firestore).
+
+1. Настройки проекта вставляются в `js/firebase-config.js` (`window.FIREBASE_CONFIG = {...}`).
+2. Правила доступа к базе — в `firestore.rules` (скопировать в Firebase → Firestore → Rules).
+3. В Firebase → Authentication → Settings → Authorized domains должен быть домен сайта.
+4. Удалить любой комментарий: Firebase → Firestore → коллекция `comments`.

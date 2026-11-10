@@ -125,15 +125,15 @@
   function avatarColor(name) { let h = 0; for (const c of name) h = (h * 31 + c.charCodeAt(0)) % 360; return `hsl(${h} 45% 42%)`; }
   function commentsBlock(key) {
     const list = (window.COMMENTS && COMMENTS[key]) || [];
-    if (!list.length) return "";
     const n = list.length;
-    return `<section class="comments"><h2 class="section-title">Комментарии · ${n}</h2>
+    return `<section class="comments"><h2 class="section-title">Комментарии · <span id="lc-total" data-static="${n}">${n}</span></h2>
       ${[...list].sort((a, b) => a.date.localeCompare(b.date)).map((c) => `<article class="comment">
         <span class="comment__ava" style="background:${avatarColor(c.author)}">${esc(c.author.replace(/[^\p{L}\p{N}]/gu, "").charAt(0).toUpperCase())}</span>
         <div class="comment__main"><div class="comment__head"><b>${esc(c.author)}</b><time>${fmtTime(c.date)}</time></div>
           <p>${esc(c.text)}</p>
           <div class="comment__votes"><span title="Нравится">▲ ${c.likes || 0}</span><span title="Не нравится">▼ ${c.dislikes || 0}</span></div></div>
-      </article>`).join("")}</section>`;
+      </article>`).join("")}
+      <div id="lc-root" hidden><div id="lc-list"></div><div id="lc-form" class="lc-form"></div></div></section>`;
   }
 
   // ---------- Страницы ----------
@@ -274,6 +274,7 @@
     if (m) { section = m[1] === "news" ? "news" : "team"; html = m[1] === "news" ? articleView(+m[2]) : playerView(+m[2]); }
     else { if (!views[h]) section = "news"; html = views[section](); }
     $("#view").innerHTML = html;
+    if (window.LiveComments) { if (m) LiveComments.mount(h); else LiveComments.unmount(); }
     $("#nav").innerHTML = NAV.map((n) => `<a href="#${n.id}" class="${n.id === section ? "active" : ""}">${n.name}</a>`).join("");
     document.body.classList.remove("nav-open");
     window.scrollTo(0, 0);

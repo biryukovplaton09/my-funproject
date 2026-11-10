@@ -292,3 +292,24 @@ time, .meta { color: var(--muted); font-size: .82rem; font-variant-numeric: tabu
 .comment p { margin: 4px 0 8px; overflow-wrap: anywhere; }
 .comment__votes { display: flex; gap: 14px; font-size: .8rem; font-weight: 700; color: var(--muted); font-variant-numeric: tabular-nums; }
 .comment__votes span:first-child { color: var(--win); }
+
+/* Live comments */
+.lc-form { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; }
+.lc-login { display: grid; justify-items: start; gap: 10px; }
+.lc-login p { margin: 0; color: var(--muted); }
+.btn-google { display: inline-flex; align-items: center; gap: 10px; padding: 10px 16px; border-radius: 8px; border: 1px solid var(--border); background: #fff; color: #1f1f1f; font: 600 .95rem var(--font-body); cursor: pointer; }
+.btn-google:hover { border-color: var(--red); }
+.btn-google svg { width: 20px; height: 20px; }
+.lc-me { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.lc-me img { width: 32px; height: 32px; border-radius: 50%; }
+.lc-link { background: none; border: 0; padding: 0; color: var(--red); font: 600 .85rem var(--font-body); cursor: pointer; margin-left: auto; }
+.comment__head .lc-link { margin-left: auto; }
+.lc-write textarea { width: 100%; resize: vertical; min-height: 80px; padding: 10px 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg); color: var(--text); font: 1rem/1.5 var(--font-body); }
+.lc-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 8px; }
+.lc-send { padding: 10px 22px; border: 0; border-radius: 8px; background: var(--red); color: #fff; font: 700 .95rem var(--font-body); cursor: pointer; }
+.lc-send:hover { background: var(--red-deep); }
+.lc-send:disabled { opacity: .6; cursor: progress; }
+.lc-err { color: var(--red); margin: 8px 0 0; font-weight: 600; }
+img.comment__ava { object-fit: cover; }
+.comment--live { border-color: color-mix(in srgb, var(--red) 30%, var(--border)); }
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
