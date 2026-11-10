@@ -9,6 +9,7 @@
   const NAV = [
     { id: "news", name: "Новости" },
     { id: "team", name: "Состав" },
+    { id: "table", name: "Таблица" },
     { id: "matches", name: "Матчи" },
     { id: "club", name: "О клубе" },
   ];
@@ -57,6 +58,21 @@
       <span class="team">${esc(home)}</span><span class="res">${res}</span><span class="team">${esc(away)}</span></div>`;
   }
 
+  const CUP = `<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M18 8h28v14c0 9-6 16-14 16s-14-7-14-16V8z" fill="currentColor"/>
+    <path d="M18 12H9v5c0 6 4 10 10 11M46 12h9v5c0 6-4 10-10 11" fill="none" stroke="currentColor" stroke-width="4"/>
+    <rect x="28" y="38" width="8" height="10" fill="currentColor"/><rect x="20" y="48" width="24" height="7" rx="2" fill="currentColor"/></svg>`;
+
+  function standings() {
+    return LEAGUE.teams
+      .map((t) => ({ ...t, p: t.w + t.d + t.l, pts: t.w * 3 + t.d, gd: t.zab - t.prop }))
+      .sort((a, b) => b.pts - a.pts || b.gd - a.gd || b.zab - a.zab || a.name.localeCompare(b.name));
+  }
+
+  function trophiesBlock() {
+    return `<div class="trophies">${TROPHIES.map((t) => `<div class="trophy"><span class="trophy__cup">${CUP}</span>
+      <b>${esc(t.title)}</b><span>${esc(t.season)}</span></div>`).join("")}</div>`;
+  }
+
   // ---------- Страницы ----------
   const views = {
     news() {
@@ -72,6 +88,16 @@
       return `<h1 class="page-title">Состав</h1><p class="page-sub">${PLAYERS.length} игроков в заявке ${esc(CLUB.name)}</p>
         <div class="squad">${[...PLAYERS].sort((a, b) => a.number - b.number).map(playerCard).join("")}</div>`;
     },
+    table() {
+      const rows = standings().map((t, i) => `<tr class="${t.name === CLUB.name ? "us" : ""}">
+          <td class="pos">${i + 1}</td><td class="tname">${esc(t.name)}</td><td>${t.p}</td><td>${t.w}</td><td>${t.d}</td><td>${t.l}</td>
+          <td class="goals">${t.zab}–${t.prop}</td><td>${t.gd > 0 ? "+" : ""}${t.gd}</td><td class="pts">${t.pts}</td></tr>`).join("");
+      return `<h1 class="page-title">Таблица ${esc(LEAGUE.name)}</h1><p class="page-sub">Сезон ${esc(LEAGUE.season)} · ${LEAGUE.teams.length} команд</p>
+        <div class="table-wrap"><table class="standings">
+          <thead><tr><th>#</th><th class="tname">Команда</th><th title="Игры">И</th><th title="Победы">В</th><th title="Ничьи">Н</th><th title="Поражения">П</th><th class="goals" title="Забито–пропущено">Мячи</th><th title="Разница мячей">±</th><th title="Очки">О</th></tr></thead>
+          <tbody>${rows}</tbody></table></div>
+        <p class="meta">При равенстве очков выше команда с лучшей разницей мячей, затем — с большим числом забитых.</p>`;
+    },
     matches() {
       const up = MATCHES.filter((m) => m.status !== "played").sort((a, b) => a.date.localeCompare(b.date));
       const played = MATCHES.filter((m) => m.status === "played").sort(byDate);
@@ -83,8 +109,9 @@
       return `<h1 class="page-title">О клубе</h1><p class="page-sub">${esc(CLUB.tagline)}</p>
         <div class="club"><img src="${EMBLEM}" alt="Эмблема ${esc(CLUB.name)}">
           <div>${CLUB.about.map((p) => `<p>${esc(p)}</p>`).join("")}
-            <dl class="facts"><div><dt>Игроков</dt><dd>${PLAYERS.length}</dd></div><div><dt>Форма</dt><dd>${esc(CLUB.colors)}</dd></div><div><dt>Статус</dt><dd>Любители</dd></div></dl>
-          </div></div>`;
+            <dl class="facts"><div><dt>Титулов АПЛ</dt><dd>${TROPHIES.length}</dd></div><div><dt>Игроков</dt><dd>${PLAYERS.length}</dd></div><div><dt>Форма</dt><dd>${esc(CLUB.colors)}</dd></div><div><dt>Статус</dt><dd>Любители</dd></div></dl>
+          </div></div>
+        <h2 class="section-title">Трофеи</h2>${trophiesBlock()}`;
     },
   };
 
@@ -116,6 +143,13 @@
     $("#sidebar").innerHTML = `
       <section class="widget club-card"><img src="${EMBLEM}" alt=""><b>${esc(CLUB.name)}</b><small>${esc(CLUB.tagline)}</small>
         <span class="kit"><i></i> Форма: ${esc(CLUB.colors.toLowerCase())}</span></section>
+      <section class="widget"><h2>Трофеи</h2><div class="trophy-line"><span class="trophy__cup">${CUP}</span>
+        <div><b>${TROPHIES.length}× чемпион ${esc(LEAGUE.name)}</b><br><small>${TROPHIES.map((t) => esc(t.season)).join(" · ")}</small></div></div></section>
+      <section class="widget"><h2>${esc(LEAGUE.name)} ${esc(LEAGUE.season)}</h2><table class="mini-table"><tbody>${(() => {
+        const st = standings(); const i = st.findIndex((t) => t.name === CLUB.name);
+        const from = Math.max(0, Math.min(i - 2, st.length - 5));
+        return st.slice(from, from + 5).map((t, k) => `<tr class="${t.name === CLUB.name ? "us" : ""}"><td>${from + k + 1}</td><td>${esc(t.name)}</td><td>${t.pts}</td></tr>`).join("");
+      })()}</tbody></table><a class="back" href="#table">Вся таблица →</a></section>
       <section class="widget"><h2>Состав</h2><ul class="mini-squad">${[...PLAYERS].sort((a, b) => a.number - b.number)
         .map((p) => `<li><a href="#player-${p.id}"><span class="n">${esc(p.number)}</span><span>${esc(p.name)}</span><small>${esc(p.short || p.position)}</small></a></li>`).join("")}</ul></section>
       <section class="widget"><h2>Следующий матч</h2>${(() => {

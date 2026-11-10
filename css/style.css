@@ -9,6 +9,7 @@
   --border: #2e2a29;
   --red: #d7262f;
   --red-deep: #8f1219;
+  --gold: #e0b341;
   --ink: #0b0a0a;          /* шапка и подвал — всегда тёмные */
   --on-ink: #f3efee;
   --font-display: "Unbounded", "Arial Black", Arial, sans-serif;
@@ -20,12 +21,12 @@
 @media (prefers-color-scheme: light) {
   :root:not([data-theme="dark"]) {
     --bg: #f5f1f0; --surface: #ffffff; --surface-2: #f0e9e8; --text: #1a1515;
-    --muted: #6e6361; --border: #e3d9d7; --red: #c81e27; --red-deep: #8f1219; color-scheme: light;
+    --muted: #6e6361; --border: #e3d9d7; --red: #c81e27; --red-deep: #8f1219; --gold: #b8860b; color-scheme: light;
   }
 }
 :root[data-theme="light"] {
   --bg: #f5f1f0; --surface: #ffffff; --surface-2: #f0e9e8; --text: #1a1515;
-  --muted: #6e6361; --border: #e3d9d7; --red: #c81e27; --red-deep: #8f1219; color-scheme: light;
+  --muted: #6e6361; --border: #e3d9d7; --red: #c81e27; --red-deep: #8f1219; --gold: #b8860b; color-scheme: light;
 }
 
 * { box-sizing: border-box; }
@@ -177,3 +178,39 @@ time, .meta { color: var(--muted); font-size: .82rem; font-variant-numeric: tabu
 }
 @media (max-width: 480px) { .squad { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; } }
 @media (prefers-reduced-motion: reduce) { .card, .player { transition: none; } .card:hover, .player:hover { transform: none; } }
+
+/* Trophies */
+.trophies { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px; }
+.trophy { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px 16px; display: grid; justify-items: center; text-align: center; gap: 4px; }
+.trophy b { font-family: var(--font-display); font-size: .92rem; }
+.trophy span:last-child { color: var(--muted); font-variant-numeric: tabular-nums; }
+.trophy__cup { color: var(--gold); display: inline-grid; }
+.trophy .trophy__cup svg { width: 56px; height: 56px; }
+.trophy-line { display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 12px; align-items: center; }
+.trophy-line svg { width: 40px; height: 40px; }
+.trophy-line small { color: var(--muted); font-variant-numeric: tabular-nums; }
+
+/* Standings */
+.table-wrap { overflow-x: auto; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 12px; }
+.standings { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; min-width: 540px; }
+.standings th, .standings td { padding: 10px 10px; text-align: center; border-bottom: 1px solid var(--border); white-space: nowrap; }
+.standings th { font-size: .72rem; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); font-weight: 700; }
+.standings tbody tr:last-child td { border-bottom: 0; }
+.standings .tname { text-align: left; font-weight: 600; width: 100%; }
+.standings .pos { color: var(--muted); width: 36px; }
+.standings .pts { font-weight: 800; }
+.standings tr.us td { background: color-mix(in srgb, var(--red) 14%, transparent); }
+.standings tr.us .tname, .standings tr.us .pos { color: var(--red); font-weight: 800; }
+.standings tr.us td:first-child { box-shadow: inset 4px 0 0 var(--red); }
+.mini-table { width: 100%; border-collapse: collapse; font-size: .9rem; font-variant-numeric: tabular-nums; margin-bottom: 8px; }
+.mini-table td { padding: 6px 0; border-top: 1px solid var(--border); }
+.mini-table tr:first-child td { border-top: 0; }
+.mini-table td:first-child { width: 28px; color: var(--muted); }
+.mini-table td:last-child { text-align: right; font-weight: 700; }
+.mini-table tr.us td { color: var(--red); font-weight: 800; }
+@media (max-width: 600px) {
+  .standings { min-width: 0; font-size: .88rem; }
+  .standings th, .standings td { padding: 9px 5px; }
+  .standings .goals { display: none; }
+  .standings .pos { width: 26px; }
+}

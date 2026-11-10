@@ -43,3 +43,22 @@ window.NEWS = [
 
 // status: "played" (сыгран) или "upcoming" (предстоит). score — для сыгранных, например "3:1".
 window.MATCHES = [];
+
+// Трофеи клуба
+window.TROPHIES = [
+  { title: "Чемпион АПЛ", season: "2023/24" },
+  { title: "Чемпион АПЛ", season: "2024/25" },
+  { title: "Чемпион АПЛ", season: "2025/26" },
+];
+
+// Турнирная таблица. Очки и порядок считаются автоматически:
+// и — игры, в — победы, н — ничьи, п — поражения, zab — забито, prop — пропущено.
+window.LEAGUE = {
+  name: "АПЛ",
+  season: "2026/27",
+  teams: [
+    "FC Durum", "Mambet FC", "FC Doner Abay", "FC Shegly", "FC Starpery", "FC Lagman",
+    "Samsa United", "FC Plov City", "Beshbarmak FC", "FC Shaurma", "Kurt Rangers", "FC Baursak",
+    "Kazy Athletic", "FC Manty", "Chak-Chak FC", "FC Airan", "Kumis Wanderers", "FC Lepeshka",
+  ].map((name) => ({ name, w: 0, d: 0, l: 0, zab: 0, prop: 0 })),
+};
