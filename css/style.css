@@ -76,7 +76,7 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 .hero { display: grid; grid-template-columns: 1.3fr 1fr; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
 .hero .cover { aspect-ratio: auto; min-height: 280px; height: 100%; }
 .hero__text { padding: 28px; display: flex; flex-direction: column; gap: 10px; justify-content: center; }
-.hero h1 { margin: 0; font-size: clamp(1.4rem, 2.6vw, 2rem); }
+.hero h1 { margin: 0; font-size: clamp(1.25rem, 2vw, 1.6rem); }
 .hero p { margin: 0; color: var(--muted); }
 .hero:hover h1 { color: var(--red); }
 .hero:hover { color: inherit; }
@@ -255,3 +255,11 @@ time, .meta { color: var(--muted); font-size: .82rem; font-variant-numeric: tabu
 .ucl-row small { color: var(--muted); }
 .pill { font-size: .75rem; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; padding: 4px 10px; border-radius: 999px; }
 .pill--loss { background: color-mix(in srgb, var(--red) 16%, transparent); color: var(--red); }
+
+/* Former players & honors */
+.squad--former .player__pic img { filter: grayscale(.35); }
+.squad--former .player__info span { color: var(--red); font-weight: 600; }
+.honors { list-style: none; margin: 0 0 16px; padding: 0; display: grid; gap: 8px; }
+.honors li { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 10px; align-items: center; font-weight: 600; }
+.honors svg { width: 22px; height: 22px; }
+.cover img.photo { object-position: center 22%; }

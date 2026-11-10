@@ -5,6 +5,8 @@
   const EMBLEM = "images/emblem.svg";
   const byDate = (a, b) => String(b.date).localeCompare(String(a.date));
   const player = (id) => PLAYERS.find((p) => p.id === id);
+  const squad = () => PLAYERS.filter((p) => !p.former).sort((a, b) => a.number - b.number);
+  const formers = () => PLAYERS.filter((p) => p.former);
 
   const NAV = [
     { id: "news", name: "Новости" },
@@ -43,7 +45,7 @@
   }
   function playerCard(p) {
     return `<a class="player" href="#player-${p.id}">${playerPic(p)}
-      <div class="player__info"><b>${esc(p.name)}</b><span>${esc(p.position)}</span></div></a>`;
+      <div class="player__info"><b>${esc(p.name)}</b><span>${p.former ? `→ ${esc(p.transfer || "покинул клуб")}` : esc(p.position)}</span></div></a>`;
   }
 
   // Сыгранный матч из LEAGUE.results с точки зрения FC Durum
@@ -116,8 +118,10 @@
         ${rest.length ? `<div class="grid">${rest.map(newsCard).join("")}</div>` : `<div class="empty">Скоро здесь появятся новые материалы о команде.</div>`}`;
     },
     team() {
-      return `<h1 class="page-title">Состав</h1><p class="page-sub">${PLAYERS.length} игроков в заявке ${esc(CLUB.name)}</p>
-        <div class="squad">${[...PLAYERS].sort((a, b) => a.number - b.number).map(playerCard).join("")}</div>`;
+      const ex = formers();
+      return `<h1 class="page-title">Состав</h1><p class="page-sub">${squad().length} игроков в заявке ${esc(CLUB.name)}</p>
+        <div class="squad">${squad().map(playerCard).join("")}</div>
+        ${ex.length ? `<h2 class="section-title">Бывшие игроки</h2><div class="squad squad--former">${ex.map(playerCard).join("")}</div>` : ""}`;
     },
     table() {
       const rows = standings().map((t, i) => `<tr class="${t.name === CLUB.name ? "us" : ""}">
@@ -162,7 +166,7 @@
       return `<h1 class="page-title">О клубе</h1><p class="page-sub">${esc(CLUB.tagline)}</p>
         <div class="club"><img src="${EMBLEM}" alt="Эмблема ${esc(CLUB.name)}">
           <div>${CLUB.about.map((p) => `<p>${esc(p)}</p>`).join("")}
-            <dl class="facts"><div><dt>Титулов АПЛ</dt><dd>${TROPHIES.length}</dd></div><div><dt>Игроков</dt><dd>${PLAYERS.length}</dd></div><div><dt>Форма</dt><dd>${esc(CLUB.colors)}</dd></div><div><dt>Статус</dt><dd>Любители</dd></div></dl>
+            <dl class="facts"><div><dt>Титулов АПЛ</dt><dd>${TROPHIES.length}</dd></div><div><dt>Игроков</dt><dd>${squad().length}</dd></div><div><dt>Форма</dt><dd>${esc(CLUB.colors)}</dd></div><div><dt>Статус</dt><dd>Любители</dd></div></dl>
           </div></div>
         <h2 class="section-title">Трофеи</h2>${trophiesBlock()}`;
     },
@@ -185,9 +189,17 @@
     const p = player(id);
     if (!p) return `<div class="empty">Игрок не найден. <a class="back" href="#team">← Состав</a></div>`;
     const news = NEWS.filter((n) => (n.players || []).includes(p.id)).sort(byDate);
-    return `<div class="profile">${playerPic(p)}<div class="profile__body"><span class="label">${esc(p.position)}</span>
-        <h1>${esc(p.name)}</h1><dl class="facts"><div><dt>Номер</dt><dd>${esc(p.number)}</dd></div><div><dt>Позиция</dt><dd>${esc(p.position)}</dd></div></dl>
-        ${p.bio ? `<p>${esc(p.bio)}</p>` : ""}<a class="back" href="#team">← Весь состав</a></div></div>
+    const facts = [
+      p.number != null && ["Номер", p.number],
+      p.position && ["Позиция", p.position],
+      p.former && ["Статус", "Бывший игрок"],
+      p.transfer && ["Новый клуб", p.transfer],
+    ].filter(Boolean);
+    return `<div class="profile">${playerPic(p)}<div class="profile__body"><span class="label">${p.former ? "Бывший игрок" : esc(p.position)}</span>
+        <h1>${esc(p.name)}</h1><dl class="facts">${facts.map(([k, v]) => `<div><dt>${k}</dt><dd>${esc(v)}</dd></div>`).join("")}</dl>
+        ${p.bio ? `<p>${esc(p.bio)}</p>` : ""}
+        ${p.honors && p.honors.length ? `<ul class="honors">${p.honors.map((h) => `<li><span class="trophy__cup">${CUP}</span>${esc(h)}</li>`).join("")}</ul>` : ""}
+        <a class="back" href="#team">← Весь состав</a></div></div>
       ${news.length ? `<h2 class="section-title">Новости об игроке</h2><div class="grid">${news.map(newsCard).join("")}</div>` : ""}`;
   }
 
@@ -205,7 +217,7 @@
         const from = Math.max(0, Math.min(i - 2, st.length - 5));
         return st.slice(from, from + 5).map((t, k) => `<tr class="${t.name === CLUB.name ? "us" : ""}"><td>${from + k + 1}</td><td>${esc(t.name)}</td><td>${t.pts}</td></tr>`).join("");
       })()}</tbody></table><a class="back" href="#table">Вся таблица →</a></section>
-      <section class="widget"><h2>Состав</h2><ul class="mini-squad">${[...PLAYERS].sort((a, b) => a.number - b.number)
+      <section class="widget"><h2>Состав</h2><ul class="mini-squad">${squad()
         .map((p) => `<li><a href="#player-${p.id}"><span class="n">${esc(p.number)}</span><span>${esc(p.name)}</span><small>${esc(p.short || p.position)}</small></a></li>`).join("")}</ul></section>
       <section class="widget"><h2>Последний матч</h2>${(() => {
         const r = ourResults()[0];
