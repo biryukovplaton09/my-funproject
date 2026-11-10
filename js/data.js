@@ -16,7 +16,7 @@ window.CLUB = {
 // photo: путь к фото, например "images/players/1.jpg". Если фото нет — показывается заглушка с номером.
 window.PLAYERS = [
   { id: 1, number: 1,  name: "Павел Григориади",  position: "Вратарь",  photo: "images/players/1.jpg", bio: "" },
-  { id: 2, number: 6,  name: "Тимур Хегай",       position: "Защитник", photo: null, bio: "" },
+  { id: 2, number: 6,  name: "Тимур Хегай",       position: "Защитник", photo: "images/players/2.jpg", bio: "" },
   { id: 3, number: 4,  name: "Платон Бирюков",    position: "Защитник", photo: "images/players/3.jpg", bio: "" },
   { id: 4, number: 11, name: "Везир Мирзоев",     position: "Вингер",   photo: null, bio: "" },
   { id: 5, number: 7,  name: "Дэниэль Шаламов",   position: "Вингер",   photo: null, bio: "" },
