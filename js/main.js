@@ -11,6 +11,23 @@
   const IG = `<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.3" cy="6.7" r="1.2" fill="currentColor"/></svg>`;
   const igUrl = (h) => `https://www.instagram.com/${encodeURIComponent(h)}/`;
   const isCaptain = (p) => p.id === CLUB.captain;
+  // Флаги рисуем SVG — эмодзи-флаги не отображаются в Windows
+  const FLAGS = {
+    de: '<rect width="3" height="1" fill="#000"/><rect y="1" width="3" height="1" fill="#DD0000"/><rect y="2" width="3" height="1" fill="#FFCE00"/>',
+    es: '<rect width="3" height="3" fill="#AA151B"/><rect y=".75" width="3" height="1.5" fill="#F1BF00"/>',
+    fr: '<rect width="1" height="3" fill="#0055A4"/><rect x="1" width="1" height="3" fill="#fff"/><rect x="2" width="1" height="3" fill="#EF4135"/>',
+    it: '<rect width="1" height="3" fill="#009246"/><rect x="1" width="1" height="3" fill="#fff"/><rect x="2" width="1" height="3" fill="#CE2B37"/>',
+    ru: '<rect width="3" height="1" fill="#fff"/><rect y="1" width="3" height="1" fill="#0039A6"/><rect y="2" width="3" height="1" fill="#D52B1E"/>',
+    pt: '<rect width="3" height="3" fill="#FF0000"/><rect width="1.2" height="3" fill="#006600"/><circle cx="1.2" cy="1.5" r=".5" fill="#FFCC00"/>',
+    br: '<rect width="3" height="3" fill="#009C3B"/><path d="M1.5 .35 2.8 1.5 1.5 2.65 .2 1.5z" fill="#FFDF00"/><circle cx="1.5" cy="1.5" r=".55" fill="#002776"/>',
+    ar: '<rect width="3" height="3" fill="#74ACDF"/><rect y="1" width="3" height="1" fill="#fff"/><circle cx="1.5" cy="1.5" r=".25" fill="#F6B40E"/>',
+    gb: '<rect width="3" height="3" fill="#012169"/><path d="M0 0 3 3M3 0 0 3" stroke="#fff" stroke-width=".6"/><path d="M0 0 3 3M3 0 0 3" stroke="#C8102E" stroke-width=".25"/><path d="M1.5 0v3M0 1.5h3" stroke="#fff" stroke-width=".8"/><path d="M1.5 0v3M0 1.5h3" stroke="#C8102E" stroke-width=".45"/>',
+    kz: '<rect width="3" height="3" fill="#00AFCA"/><circle cx="1.5" cy="1.3" r=".45" fill="#FEC50C"/><path d="M1 2.05q.5-.3 1 0" stroke="#FEC50C" stroke-width=".12" fill="none"/>',
+    tr: '<rect width="3" height="3" fill="#E30A17"/><circle cx="1.25" cy="1.5" r=".65" fill="#fff"/><circle cx="1.42" cy="1.5" r=".52" fill="#E30A17"/><circle cx="2.05" cy="1.5" r=".18" fill="#fff"/>',
+    us: '<rect width="3" height="3" fill="#B22234"/><path d="M0 .35h3M0 .8h3M0 1.25h3M0 1.7h3M0 2.15h3M0 2.6h3" stroke="#fff" stroke-width=".22"/><rect width="1.3" height="1.5" fill="#3C3B6E"/>',
+  };
+  const flagSvg = (p, cls = "flag") => (p.flag && FLAGS[p.flag])
+    ? `<svg class="${cls}" viewBox="0 0 3 3" preserveAspectRatio="none" role="img" aria-label="${esc(p.nationality || "")}"><title>${esc(p.nationality || "")}</title>${FLAGS[p.flag]}</svg>` : "";
   const isRival = (name) => name === CLUB.rival;
 
   const NAV = [
@@ -39,7 +56,7 @@
     </svg></div>`;
   }
   function playerPic(p) {
-    return `<div class="player__pic">${p.photo ? `<img src="${esc(p.photo)}" alt="${esc(p.name)}" loading="lazy">` : jersey(p.number)}
+    return `<div class="player__pic">${flagSvg(p, "flag flag--corner")}${p.photo ? `<img src="${esc(p.photo)}" alt="${esc(p.name)}" loading="lazy">` : jersey(p.number)}
       </div>`;
   }
 
@@ -241,17 +258,17 @@
       p.position && ["Позиция", p.position],
       p.nickname && ["Прозвище", `«${p.nickname}»`],
       p.born && ["Год рождения", p.born],
-      p.nationality && ["Национальность", `${p.flag ? p.flag + " " : ""}${p.nationality}`],
+      p.nationality && ["Национальность", p.nationality],
       p.foot && ["Рабочая нога", p.foot],
       p.trait && ["Фишка", p.trait],
       p.prevClub && ["Прошлый клуб", p.prevClub],
-      p.favPlayer && ["Любимый игрок", p.favPlayer],
+      p.favPlayer && [p.favPlayer.includes(",") ? "Любимые игроки" : "Любимый игрок", p.favPlayer],
       p.favClub && ["Любимый клуб", p.favClub],
       p.former && ["Статус", "Бывший игрок"],
       p.transfer && ["Новый клуб", p.transfer],
     ].filter(Boolean);
     return `<div class="profile">${playerPic(p)}<div class="profile__body"><span class="label">${p.former ? "Бывший игрок" : esc(p.position)}</span>
-        <h1>${esc(p.name)}</h1><dl class="facts">${facts.map(([k, v]) => `<div><dt>${k}</dt><dd>${esc(v)}</dd></div>`).join("")}</dl>
+        <h1 class="pname">${flagSvg(p, "flag flag--name")}${esc(p.name)}</h1><dl class="facts">${facts.map(([k, v]) => `<div><dt>${k}</dt><dd>${esc(v)}</dd></div>`).join("")}</dl>
         ${p.bio ? `<p>${esc(p.bio)}</p>` : ""}
         ${p.stats ? `<h3 class="sub">Сезон ${esc(LEAGUE.season)}</h3><div class="pstats"><div><b>${p.stats.goals || 0}</b><span>${plural(p.stats.goals || 0, "гол", "гола", "голов")}</span></div><div><b>${p.stats.assists || 0}</b><span>${plural(p.stats.assists || 0, "передача", "передачи", "передач")}</span></div>${p.stats.note ? `<small class="meta">${esc(p.stats.note)}</small>` : ""}</div>` : ""}
         ${p.instagram ? `<a class="ig" href="${igUrl(p.instagram)}" target="_blank" rel="noopener">${IG}<span>@${esc(p.instagram)}</span></a>` : ""}
@@ -277,7 +294,7 @@
         return st.slice(from, from + 5).map((t, k) => `<tr class="${t.name === CLUB.name ? "us" : ""}"><td>${from + k + 1}</td><td>${esc(t.name)}</td><td>${t.pts}</td></tr>`).join("");
       })()}</tbody></table><a class="back" href="#table">Вся таблица →</a></section>
       <section class="widget"><h2>Состав</h2><ul class="mini-squad">${squad()
-        .map((p) => `<li><a href="#player-${p.id}"><span class="n">${esc(p.number)}</span><span>${esc(p.name)}${isCaptain(p) ? ` <span class="cap" title="Капитан">C</span>` : ""}</span><small>${esc(p.short || p.position)}</small></a></li>`).join("")}</ul></section>
+        .map((p) => `<li><a href="#player-${p.id}"><span class="n">${esc(p.number)}</span><span>${flagSvg(p, "flag flag--mini")}${esc(p.name)}${isCaptain(p) ? ` <span class="cap" title="Капитан">C</span>` : ""}</span><small>${esc(p.short || p.position)}</small></a></li>`).join("")}</ul></section>
       <section class="widget"><h2>Последний матч</h2>${(() => {
         const r = ourResults()[0];
         return r ? `<div class="last"><span>${esc(r.home)}</span><b>${esc(r.score.replace(":", " : "))}</b><span>${esc(r.away)}</span></div><small class="meta">${r.round}-й тур</small>` : `<span class="meta">Пока не сыгран</span>`;

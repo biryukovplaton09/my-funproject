@@ -28,28 +28,34 @@ window.CLUB = {
 window.PLAYERS = [
   {
     id: 1, number: 1, name: "Павел Григориади", position: "Вратарь", instagram: "p.grigoriadii", photo: "images/players/1.jpg",
-    nickname: "Бургер", born: 2008, foot: "Правая", nationality: "Германия", flag: "🇩🇪", prevClub: "Бавария",
+    nickname: "Бургер", born: 2008, foot: "Правая", nationality: "Германия", flag: "de", prevClub: "Бавария",
     favPlayer: "Мануэль Нойер", favClub: "Бавария", trait: "Пенальтист",
     bio: "Пришёл в FC Durum из «Баварии». Вратарём стал случайно: однажды отбил удар лицом — и с тех пор из ворот его уже не выпускали. При этом Павел ещё и штатный пенальтист команды.",
     stats: { goals: 1, assists: 2, note: "Гол — с пенальти" },
   },
   {
     id: 2, number: 6, name: "Тимур Хегай", position: "Защитник", instagram: "xegaii", photo: "images/players/2.jpg",
-    nickname: "Кулагерский монстр", born: 2008, foot: "Обе (одинаково плохо)", nationality: "Испания", flag: "🇪🇸", prevClub: "Барселона",
+    nickname: "Кулагерский монстр", born: 2008, foot: "Обе (одинаково плохо)", nationality: "Испания", flag: "es", prevClub: "Барселона",
     favPlayer: "Лионель Месси", favClub: "Барселона", trait: "Финт Зидана",
     bio: "Пришёл в FC Durum из «Барселоны». Амбидекстр: одинаково уверенно — и одинаково плохо — бьёт с обеих ног. Его фирменный приём — финт Зидана. Самая известная история: в финале Тимур «привёз» пенальти в собственные ворота.",
     stats: { goals: 2, assists: 2 },
     awards: [{ title: "Лучший ассистент мира", season: "2024/25" }],
   },
-  { id: 3, number: 4,  name: "Платон Бирюков",    position: "Защитник", instagram: "biriukov_platon", photo: "images/players/3.jpg", bio: "",
-    awards: [{ title: "Лучший защитник мира", season: "2025/26" }, { title: "Лучший защитник ЛЧ", season: "2024/25" }] },
+  {
+    id: 3, number: 4, name: "Платон Бирюков", position: "Защитник", instagram: "biriukov_platon", photo: "images/players/3.jpg",
+    nickname: "Умный человек в очках", born: 2009, foot: "Правая", nationality: "Франция", flag: "fr", prevClub: "Реал Мадрид",
+    favPlayer: "Роналду, Зидан, Мбаппе", favClub: "Реал Мадрид", trait: "Подкат",
+    bio: "Пришёл в FC Durum из «Реал Мадрида». Главное оружие — подкат. Самая известная история: в игре против Mambet FC Платон забил ножницами — правда, в свои ворота. Зато красиво.",
+    stats: { goals: 4, assists: 1 },
+    awards: [{ title: "Лучший защитник мира", season: "2025/26" }, { title: "Лучший защитник ЛЧ", season: "2024/25" }],
+  },
   { id: 4, number: 11, name: "Везир Мирзоев",     position: "Вингер",   instagram: "awanteya", photo: "images/players/4.jpg", bio: "" },
   { id: 5, number: 7,  name: "Дэниэль Шаламов",   position: "Вингер",   instagram: "freyah0", photo: "images/players/5.jpg", bio: "",
     awards: [{ title: "Золотой мяч", season: "2023/24", kind: "ball" }, { title: "Золотой мяч", season: "2024/25", kind: "ball" }, { title: "Лучший игрок ЛЧ", season: "2024/25" }, { title: "Лучший бомбардир АПЛ", season: "2024/25" }] },
   { id: 6, number: 10, name: "Роман Юдин",        position: "Центральный атакующий полузащитник", short: "ЦАП", instagram: "yudin_obman", photo: "images/players/6.jpg", bio: "",
     awards: [{ title: "Золотой мяч", season: "2025/26", kind: "ball" }, { title: "Лучший бомбардир АПЛ", season: "2023/24" }] },
 
-  // Анкета (необязательно): nickname, born (год), foot, nationality + flag, prevClub, favPlayer, favClub, trait,
+  // Анкета (необязательно): nickname, born (год), foot, nationality + flag (код страны: de, es, fr, it, pt, br, ar, gb, ru, kz, tr, us), prevClub, favPlayer, favClub, trait,
   // stats: { goals, assists } — за текущий сезон.
   // awards — индивидуальные награды; kind: "ball" — значок Золотого мяча.
   // Бывшие игроки: former: true — показываются отдельным блоком в «Составе»

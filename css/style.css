@@ -340,3 +340,10 @@ img.comment__ava { object-fit: cover; }
 .pstats span { font-size: .85rem; color: #c9c1bf; }
 .profile .facts { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
 .profile__body .ig { margin-right: 100%; }
+
+/* Flags */
+.flag { display: inline-block; border-radius: 3px; box-shadow: 0 0 0 1px rgba(0,0,0,.25), 0 2px 8px rgba(0,0,0,.35); overflow: hidden; }
+.flag--corner { position: absolute; top: 10px; left: 10px; width: 46px; height: 31px; z-index: 2; }
+.profile .flag--corner { width: 60px; height: 40px; top: 14px; left: 14px; }
+.flag--name { width: 1.6em; height: 1.07em; margin-right: .35em; vertical-align: -.08em; }
+.flag--mini { width: 18px; height: 12px; margin-right: 6px; vertical-align: -1px; box-shadow: 0 0 0 1px rgba(0,0,0,.2); }
