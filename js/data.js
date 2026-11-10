@@ -73,6 +73,12 @@ window.PLAYERS = [
     awards: [{ title: "Золотой мяч", season: "2025/26", kind: "ball" }, { title: "Лучший бомбардир АПЛ", season: "2023/24" }],
   },
 
+  // Академия: academy: true — показываются на вкладке «Академия» в «Составе» (без фото — заглушка-футболка)
+  { id: 8,  number: null, name: "Арам",  position: "Вингер",     academy: true, photo: null, bio: "" },
+  { id: 9,  number: null, name: "Арут",  position: "Нападающий", short: "ФРВ", academy: true, photo: null, bio: "" },
+  { id: 10, number: null, name: "Алиар", position: "Вингер",     academy: true, photo: null, bio: "" },
+  { id: 11, number: null, name: "Илья",  position: "Вратарь",    academy: true, photo: null, bio: "" },
+
   // Анкета (необязательно): nickname, born (год), foot, nationality + flag (код страны: de, es, fr, it, pt, br, ar, gb, en (Англия), ru, il, kz, tr, us; два флага — ["ru", "il"]), prevClub, favPlayer, favClub, trait,
   // stats: { goals, assists } — за текущий сезон во всех турнирах.
   // awards — индивидуальные награды; kind: "ball" — значок Золотого мяча.

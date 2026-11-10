@@ -5,7 +5,8 @@
   const EMBLEM = "images/emblem.svg";
   const byDate = (a, b) => String(b.date).localeCompare(String(a.date));
   const player = (id) => PLAYERS.find((p) => p.id === id);
-  const squad = () => PLAYERS.filter((p) => !p.former).sort((a, b) => a.number - b.number);
+  const squad = () => PLAYERS.filter((p) => !p.former && !p.academy).sort((a, b) => a.number - b.number);
+  const academy = () => PLAYERS.filter((p) => p.academy);
   const formers = () => PLAYERS.filter((p) => p.former);
 
   const IG = `<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.3" cy="6.7" r="1.2" fill="currentColor"/></svg>`;
@@ -61,16 +62,16 @@
   }
 
   // Заглушка игрока: футболка в полоску с номером
-  function jersey(num) {
+  function jersey(num, uid = num) {
     return `<div class="jersey"><svg viewBox="0 0 100 90" aria-hidden="true">
-      <defs><clipPath id="j${num}"><path d="M30 4 L14 10 L2 30 L16 38 L22 30 L22 88 L78 88 L78 30 L84 38 L98 30 L86 10 L70 4 C66 12 58 16 50 16 C42 16 34 12 30 4 Z"/></clipPath></defs>
-      <g clip-path="url(#j${num})"><rect width="100" height="90" fill="#141111"/>
+      <defs><clipPath id="j${uid}"><path d="M30 4 L14 10 L2 30 L16 38 L22 30 L22 88 L78 88 L78 30 L84 38 L98 30 L86 10 L70 4 C66 12 58 16 50 16 C42 16 34 12 30 4 Z"/></clipPath></defs>
+      <g clip-path="url(#j${uid})"><rect width="100" height="90" fill="#141111"/>
         <rect x="28" width="11" height="90" fill="#d7262f"/><rect x="44.5" width="11" height="90" fill="#d7262f"/><rect x="61" width="11" height="90" fill="#d7262f"/></g>
       <text x="50" y="66" text-anchor="middle" font-family="Unbounded, Arial Black, sans-serif" font-weight="800" font-size="26" fill="#fff" stroke="#141111" stroke-width="1.5" paint-order="stroke">${esc(num)}</text>
     </svg></div>`;
   }
   function playerPic(p) {
-    return `<div class="player__pic">${flagSvg(p, "flag flag--corner")}${p.photo ? `<img src="${esc(p.photo)}" alt="${esc(p.name)}" loading="lazy">` : jersey(p.number)}
+    return `<div class="player__pic">${flagSvg(p, "flag flag--corner")}${p.photo ? `<img src="${esc(p.photo)}" alt="${esc(p.name)}" loading="lazy">` : jersey(p.number != null ? p.number : p.name.charAt(0).toUpperCase(), p.id)}
       </div>`;
   }
 
@@ -231,12 +232,17 @@
         <h2 class="section-title">Все новости</h2>
         ${rest.length ? `<div class="grid">${rest.map(newsCard).join("")}</div>` : `<div class="empty">Скоро здесь появятся новые материалы о команде.</div>`}`;
     },
-    team() {
-      const ex = formers();
-      return `<h1 class="page-title">Состав</h1><p class="page-sub">${squad().length} игроков в заявке ${esc(CLUB.name)}</p>
+    team(tab = "main") {
+      const ex = formers(), ac = academy();
+      const tabs = `<div class="tabs" role="tablist"><a href="#team" role="tab" class="${tab === "main" ? "on" : ""}">Основной состав <span>${squad().length}</span></a>
+        <a href="#academy" role="tab" class="${tab === "academy" ? "on" : ""}">Академия <span>${ac.length}</span></a></div>`;
+      if (tab === "academy") return `<h1 class="page-title">Академия</h1><p class="page-sub">Молодые игроки ${esc(CLUB.name)} — будущее клуба</p>${tabs}
+        ${ac.length ? `<div class="squad squad--academy">${ac.map(playerCard).join("")}</div>` : `<div class="empty">В академии пока нет игроков.</div>`}`;
+      return `<h1 class="page-title">Состав</h1><p class="page-sub">${squad().length} игроков в заявке ${esc(CLUB.name)}</p>${tabs}
         <div class="squad">${squad().map(playerCard).join("")}</div>
         ${ex.length ? `<h2 class="section-title">Бывшие игроки</h2><div class="squad squad--former">${ex.map(playerCard).join("")}</div>` : ""}`;
     },
+    academy() { return views.team("academy"); },
     feed() {
       const list = [...POSTS].sort((a, b) => b.date.localeCompare(a.date));
       return `<div class="feed"><div class="feed__top"><h1 class="page-title">Лента</h1><p class="page-sub">Игроки ${esc(CLUB.name)} — от первого лица</p></div>
@@ -340,14 +346,14 @@
       p.former && ["Статус", "Бывший игрок"],
       p.transfer && ["Новый клуб", p.transfer],
     ].filter(Boolean);
-    return `<div class="profile">${playerPic(p)}<div class="profile__body"><span class="label">${p.former ? "Бывший игрок" : esc(p.position)}</span>
+    return `<div class="profile">${playerPic(p)}<div class="profile__body"><span class="label">${p.former ? "Бывший игрок" : p.academy ? `Академия · ${esc(p.position)}` : esc(p.position)}</span>
         <h1 class="pname">${flagSvg(p, "flag flag--name")}${esc(p.name)}</h1><dl class="facts">${facts.map(([k, v]) => `<div><dt>${k}</dt><dd>${esc(v)}</dd></div>`).join("")}</dl>
         ${p.bio ? `<p>${esc(p.bio)}</p>` : ""}
         ${p.stats ? `<h3 class="sub">Сезон ${esc(LEAGUE.season)} · все турниры</h3><div class="pstats"><div><b>${p.stats.goals || 0}</b><span>${plural(p.stats.goals || 0, "гол", "гола", "голов")}</span></div><div><b>${p.stats.assists || 0}</b><span>${plural(p.stats.assists || 0, "передача", "передачи", "передач")}</span></div>${p.stats.note ? `<small class="meta">${esc(p.stats.note)}</small>` : ""}</div>` : ""}
         ${p.instagram ? `<a class="ig" href="${igUrl(p.instagram)}" target="_blank" rel="noopener">${IG}<span>@${esc(p.instagram)}</span></a>` : ""}
         ${awardsOf(p).length ? `<h3 class="sub">Индивидуальные награды</h3><ul class="honors">${awardsOf(p).map((a) => `<li class="${a.kind === "ball" ? "is-ball" : ""}"><span class="trophy__cup">${awardIcon(a)}</span><span>${esc(a.title)} <small>${esc(a.season)}</small></span></li>`).join("")}</ul>` : ""}
         ${p.honors && p.honors.length ? `<h3 class="sub">Достижения</h3><ul class="honors">${p.honors.map((h) => `<li><span class="trophy__cup">${CUP}</span>${esc(h)}</li>`).join("")}</ul>` : ""}
-        <a class="back" href="#team">← Весь состав</a></div></div>
+        <a class="back" href="${p.academy ? "#academy" : "#team"}">← ${p.academy ? "Академия" : "Весь состав"}</a></div></div>
       ${news.length ? `<h2 class="section-title">Новости об игроке</h2><div class="grid">${news.map(newsCard).join("")}</div>` : ""}
       ${POSTS.some((x) => x.author === p.id) ? `<h2 class="section-title">Посты в Ленте</h2><div class="feed">${POSTS.filter((x) => x.author === p.id).sort((a, b) => b.date.localeCompare(a.date)).map((x) => postCard(x)).join("")}</div>` : ""}
       ${commentsBlock("player-" + p.id)}`;
@@ -388,7 +394,7 @@
       section = { news: "news", player: "team", post: "feed" }[m[1]];
       html = { news: articleView, player: playerView, post: postView }[m[1]](+m[2]);
     }
-    else { if (!views[h]) section = "news"; html = views[section](); }
+    else { if (!views[h]) section = "news"; html = views[section](); if (section === "academy") section = "team"; }
     $("#view").innerHTML = html;
     if (window.LiveComments) { if (m) LiveComments.mount(h); else LiveComments.unmount(); }
     bindLikes();

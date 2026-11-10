@@ -379,3 +379,11 @@ img.comment__ava { object-fit: cover; }
 .pa--like.on svg path { fill: currentColor; }
 .feed .back { margin: 0; }
 @media (max-width: 480px) { .post { grid-template-columns: 40px minmax(0, 1fr); padding: 12px; } .post__ava { width: 40px; height: 40px; } .post__actions { gap: 20px; } }
+
+/* Squad tabs & academy */
+.tabs { display: inline-flex; gap: 4px; padding: 4px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; margin: 0 0 20px; flex-wrap: wrap; }
+.tabs a { padding: 8px 16px; border-radius: 7px; font-weight: 700; font-size: .9rem; display: inline-flex; gap: 8px; align-items: center; }
+.tabs a span { font-size: .75rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.tabs a.on { background: var(--red); color: #fff; }
+.tabs a.on span { color: rgba(255,255,255,.8); }
+.squad--academy .player__pic { background: linear-gradient(180deg, var(--surface-2), #241b1b); }
