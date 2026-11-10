@@ -244,7 +244,8 @@
     },
     academy() { return views.team("academy"); },
     feed() {
-      const list = [...POSTS].sort((a, b) => b.date.localeCompare(a.date));
+      // Порядок — по времени публикации на сайте: последний добавленный пост (больший id) сверху
+      const list = [...POSTS].sort((a, b) => b.id - a.id);
       return `<div class="feed"><div class="feed__top"><h1 class="page-title">Лента</h1><p class="page-sub">Игроки ${esc(CLUB.name)} — от первого лица</p></div>
         <div class="feed__who">${squad().map((p) => `<a href="#player-${p.id}" title="${esc(p.name)}">${p.photo ? `<img src="${esc(p.photo)}" alt="${esc(p.name)}">` : ""}<span>${esc(p.name.split(" ")[0])}</span></a>`).join("")}</div>
         ${list.length ? list.map((p) => postCard(p)).join("") : `<div class="empty">Пока здесь тихо. Скоро игроки напишут первые посты.</div>`}</div>`;
@@ -358,7 +359,7 @@
         ${p.honors && p.honors.length ? `<h3 class="sub">Достижения</h3><ul class="honors">${p.honors.map((h) => `<li><span class="trophy__cup">${CUP}</span>${esc(h)}</li>`).join("")}</ul>` : ""}
         <a class="back" href="${p.academy ? "#academy" : "#team"}">← ${p.academy ? "Академия" : "Весь состав"}</a></div></div>
       ${news.length ? `<h2 class="section-title">Новости об игроке</h2><div class="grid">${news.map(newsCard).join("")}</div>` : ""}
-      ${POSTS.some((x) => x.author === p.id) ? `<h2 class="section-title">Посты в Ленте</h2><div class="feed">${POSTS.filter((x) => x.author === p.id).sort((a, b) => b.date.localeCompare(a.date)).map((x) => postCard(x)).join("")}</div>` : ""}
+      ${POSTS.some((x) => x.author === p.id) ? `<h2 class="section-title">Посты в Ленте</h2><div class="feed">${POSTS.filter((x) => x.author === p.id).sort((a, b) => b.id - a.id).map((x) => postCard(x)).join("")}</div>` : ""}
       ${commentsBlock("player-" + p.id)}`;
   }
 
