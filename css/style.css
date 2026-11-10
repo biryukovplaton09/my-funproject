@@ -313,3 +313,21 @@ time, .meta { color: var(--muted); font-size: .82rem; font-variant-numeric: tabu
 img.comment__ava { object-fit: cover; }
 .comment--live { border-color: color-mix(in srgb, var(--red) 30%, var(--border)); }
 .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* Captain, Instagram, legends, derby */
+.cap { display: inline-grid; place-items: center; width: 18px; height: 18px; border-radius: 4px; background: var(--red); color: #fff; font: 800 .68rem var(--font-body); vertical-align: 2px; }
+.ig { display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 999px; border: 1px solid var(--border); background: var(--surface-2); font-weight: 600; font-size: .9rem; margin: 0 0 16px; }
+.ig svg { width: 18px; height: 18px; color: #d62976; flex-shrink: 0; }
+.ig:hover { border-color: #d62976; color: inherit; }
+.ig-list { display: flex; flex-wrap: wrap; gap: 10px; }
+.ig-list .ig { margin: 0; background: var(--surface); }
+.ig-list .ig b { font-weight: 700; margin-right: 4px; }
+.legend { background: var(--ink); color: var(--on-ink); border-radius: var(--radius); padding: 22px 24px; display: grid; gap: 10px;
+  background-image: repeating-linear-gradient(90deg, rgba(215,38,47,.16) 0 40px, transparent 40px 80px); }
+.legend__score { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: 16px; align-items: center; font-family: var(--font-display); font-size: clamp(.95rem, 2vw, 1.2rem); }
+.legend__score span:last-child { text-align: right; }
+.legend__score b { font-size: clamp(2rem, 6vw, 3.2rem); color: #fff; font-variant-numeric: tabular-nums; }
+.legend p { margin: 0; color: #c9c1bf; }
+.trophy__note { color: var(--muted); font-size: .78rem; }
+.ucl-row small strong { color: var(--text); }
+.derby { display: inline-block; font: 800 .62rem var(--font-body); text-transform: uppercase; letter-spacing: .08em; color: #fff; background: var(--ink); border: 1px solid var(--red); padding: 2px 6px; border-radius: 4px; vertical-align: 2px; }

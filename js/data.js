@@ -7,29 +7,40 @@ window.CLUB = {
   name: "FC Durum",
   tagline: "Любительская футбольная команда",
   colors: "Красно-чёрные",
+  founded: 2023,
+  stadium: "Кулагер Стэдиум",
+  captain: 6,          // id игрока
+  coach: "Роман Юдин (играющий тренер)",
+  rival: "FC Doner Abay",
   about: [
-    "FC Durum — любительская футбольная команда. Мы играем ради игры, команды и побед.",
-    "Основная форма клуба — красно-чёрная. На этом сайте публикуются новости команды, состав и результаты матчей.",
+    "FC Durum — любительская футбольная команда, основанная в 2023 году. Название клуб получил в честь настоящего турецкого дюрюма — того самого лаваша с начинкой.",
+    "Домашний стадион — «Кулагер Стэдиум». Капитан и тренер команды — Роман Юдин.",
+    "За три сезона FC Durum трижды выиграл АПЛ и дважды доходил до финала Лиги чемпионов. Основная форма клуба — красно-чёрная.",
+  ],
+  // Легендарные матчи в истории клуба
+  legends: [
+    { title: "Разгром главного соперника", home: "FC Durum", away: "FC Doner Abay", score: "10:1",
+      text: "Самая памятная игра в истории клуба: FC Durum разнёс главных соперников — FC Doner Abay." },
   ],
 };
 
 // photo: путь к фото, например "images/players/1.jpg". Если фото нет — показывается заглушка с номером.
 window.PLAYERS = [
-  { id: 1, number: 1,  name: "Павел Григориади",  position: "Вратарь",  photo: "images/players/1.jpg", bio: "" },
-  { id: 2, number: 6,  name: "Тимур Хегай",       position: "Защитник", photo: "images/players/2.jpg", bio: "",
+  { id: 1, number: 1,  name: "Павел Григориади",  position: "Вратарь",  instagram: "p.grigoriadii", photo: "images/players/1.jpg", bio: "" },
+  { id: 2, number: 6,  name: "Тимур Хегай",       position: "Защитник", instagram: "xegaii", photo: "images/players/2.jpg", bio: "",
     awards: [{ title: "Лучший ассистент мира", season: "2024/25" }] },
-  { id: 3, number: 4,  name: "Платон Бирюков",    position: "Защитник", photo: "images/players/3.jpg", bio: "",
+  { id: 3, number: 4,  name: "Платон Бирюков",    position: "Защитник", instagram: "biriukov_platon", photo: "images/players/3.jpg", bio: "",
     awards: [{ title: "Лучший защитник мира", season: "2025/26" }, { title: "Лучший защитник ЛЧ", season: "2024/25" }] },
-  { id: 4, number: 11, name: "Везир Мирзоев",     position: "Вингер",   photo: "images/players/4.jpg", bio: "" },
-  { id: 5, number: 7,  name: "Дэниэль Шаламов",   position: "Вингер",   photo: "images/players/5.jpg", bio: "",
+  { id: 4, number: 11, name: "Везир Мирзоев",     position: "Вингер",   instagram: "awanteya", photo: "images/players/4.jpg", bio: "" },
+  { id: 5, number: 7,  name: "Дэниэль Шаламов",   position: "Вингер",   instagram: "freyah0", photo: "images/players/5.jpg", bio: "",
     awards: [{ title: "Золотой мяч", season: "2023/24", kind: "ball" }, { title: "Золотой мяч", season: "2024/25", kind: "ball" }, { title: "Лучший игрок ЛЧ", season: "2024/25" }, { title: "Лучший бомбардир АПЛ", season: "2024/25" }] },
-  { id: 6, number: 10, name: "Роман Юдин",        position: "Центральный атакующий полузащитник", short: "ЦАП", photo: "images/players/6.jpg", bio: "",
+  { id: 6, number: 10, name: "Роман Юдин",        position: "Центральный атакующий полузащитник", short: "ЦАП", instagram: "yudin_obman", photo: "images/players/6.jpg", bio: "",
     awards: [{ title: "Золотой мяч", season: "2025/26", kind: "ball" }, { title: "Лучший бомбардир АПЛ", season: "2023/24" }] },
 
   // awards — индивидуальные награды; kind: "ball" — значок Золотого мяча.
   // Бывшие игроки: former: true — показываются отдельным блоком в «Составе»
   {
-    id: 7, number: null, name: "Альмир Дё", position: null, photo: "images/players/7.jpg", former: true,
+    id: 7, number: null, name: "Альмир Дё", position: null, instagram: "alm1r.d", photo: "images/players/7.jpg", former: true,
     transfer: "Шанхай Юнайтед",
     bio: "Лучший бомбардир FC Durum в сезоне 2025/26. В нынешнее трансферное окно перешёл в «Шанхай Юнайтед».",
     honors: ["3× чемпион АПЛ (2023/24, 2024/25, 2025/26)", "2× финалист ЛЧ (2023/24, 2024/25)", "Лучший бомбардир команды 2025/26"],
@@ -169,8 +180,8 @@ window.UCL = {
   short: "ЛЧ",
   // История выступлений. season — можно вписать сезон, например "2024/25".
   history: [
-    { season: "2023/24", stage: "Финал", result: "Поражение" },
-    { season: "2024/25", stage: "Финал", result: "Поражение" },
+    { season: "2023/24", stage: "Финал", result: "Поражение", opponent: "Спортик Юнайтед", score: "3:4" },
+    { season: "2024/25", stage: "Финал", result: "Поражение", opponent: "Бокс Команд", score: "4:5" },
   ],
   // Ближайший этап. matches — пары; пока соперники не определены, список пуст.
   next: { date: "2027-01-31", title: "Матчи Лиги чемпионов", matches: [] },

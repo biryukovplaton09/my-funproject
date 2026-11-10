@@ -8,6 +8,11 @@
   const squad = () => PLAYERS.filter((p) => !p.former).sort((a, b) => a.number - b.number);
   const formers = () => PLAYERS.filter((p) => p.former);
 
+  const IG = `<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.3" cy="6.7" r="1.2" fill="currentColor"/></svg>`;
+  const igUrl = (h) => `https://www.instagram.com/${encodeURIComponent(h)}/`;
+  const isCaptain = (p) => p.id === CLUB.captain;
+  const isRival = (name) => name === CLUB.rival;
+
   const NAV = [
     { id: "news", name: "Новости" },
     { id: "team", name: "Состав" },
@@ -48,7 +53,7 @@
     const balls = awardsOf(p).filter((a) => a.kind === "ball").length, total = awardsOf(p).length;
     const badge = total ? `<span class="player__badge${balls ? " gold" : ""}" title="Индивидуальные награды">${balls ? BALL : CUP}${balls ? `${balls}× ЗМ` : total}</span>` : "";
     return `<a class="player" href="#player-${p.id}">${playerPic(p).replace(/<\/div>$/, `${badge}</div>`)}
-      <div class="player__info"><b>${esc(p.name)}</b><span>${p.former ? `→ ${esc(p.transfer || "покинул клуб")}` : esc(p.position)}</span></div></a>`;
+      <div class="player__info"><b>${esc(p.name)}${isCaptain(p) ? ` <span class="cap" title="Капитан">C</span>` : ""}</b><span>${p.former ? `→ ${esc(p.transfer || "покинул клуб")}` : esc(p.position)}</span></div></a>`;
   }
 
   // Сыгранный матч из LEAGUE.results с точки зрения FC Durum
@@ -58,7 +63,8 @@
     const us = homeUs ? hg : ag, them = homeUs ? ag : hg;
     const cls = us > them ? "win" : us < them ? "loss" : "draw";
     const label = { win: "Победа", loss: "Поражение", draw: "Ничья" }[cls];
-    return `<div class="match match--${cls}"><span class="when">${r.round}-й тур · <b>${label}</b></span>
+    const derby = isRival(r.home) || isRival(r.away);
+    return `<div class="match match--${cls}"><span class="when">${r.round}-й тур · <b>${label}</b>${derby ? ` <span class="derby">Дерби</span>` : ""}</span>
       <span class="team">${esc(r.home)}</span><span class="res">${hg} : ${ag}</span><span class="team">${esc(r.away)}</span></div>`;
   }
   const TBD = "Соперник определяется";
@@ -110,7 +116,7 @@
     return `<div class="trophies">${TROPHIES.map((t) => `<div class="trophy"><span class="trophy__cup">${CUP}</span>
       <b>${esc(t.title)}</b><span>${esc(t.season)}</span></div>`).join("")}
       ${finals.map((h) => `<div class="trophy trophy--silver"><span class="trophy__cup">${CUP}</span>
-      <b>Финалист ${esc(UCL.short)}</b><span>${h.season ? esc(h.season) : esc(UCL.name)}</span></div>`).join("")}</div>`;
+      <b>Финалист ${esc(UCL.short)}</b><span>${h.season ? esc(h.season) : esc(UCL.name)}</span>${h.opponent ? `<small class="trophy__note">${esc(h.score)} · ${esc(h.opponent)}</small>` : ""}</div>`).join("")}</div>`;
   }
 
   function daysUntil(iso) {
@@ -155,7 +161,7 @@
     },
     table() {
       const rows = standings().map((t, i) => `<tr class="${t.name === CLUB.name ? "us" : ""}">
-          <td class="pos">${i + 1}</td><td class="tname">${esc(t.name)}</td><td>${t.p}</td><td>${t.w}</td><td>${t.d}</td><td>${t.l}</td>
+          <td class="pos">${i + 1}</td><td class="tname">${esc(t.name)}${isRival(t.name) ? ` <span class="derby" title="Главный соперник">Соперник</span>` : ""}</td><td>${t.p}</td><td>${t.w}</td><td>${t.d}</td><td>${t.l}</td>
           <td class="goals">${t.zab}–${t.prop}</td><td>${t.gd > 0 ? "+" : ""}${t.gd}</td><td class="pts">${t.pts}</td><td class="formcol">${formDots(t.form)}</td></tr>`).join("");
       return `<h1 class="page-title">Таблица ${esc(LEAGUE.name)}</h1><p class="page-sub">Сезон ${esc(LEAGUE.season)} · ${LEAGUE.teams.length} команд</p>
         <div class="table-wrap"><table class="standings">
@@ -179,7 +185,7 @@
              <p class="meta">Пары и время матчей пока не определены. Как только станет известно — расписание появится здесь.</p>`}
         <h2 class="section-title">История в ЛЧ</h2>
         <div class="ucl-history">${UCL.history.map((h) => `<div class="ucl-row"><span class="trophy__cup silver">${CUP}</span>
-            <div><b>${esc(h.stage)}</b><small>${h.season ? esc(h.season) : "Сезон уточняется"}</small></div><span class="pill pill--loss">${esc(h.result)}</span></div>`).join("")}</div>`;
+            <div><b>${esc(h.stage)} ${h.season ? esc(h.season) : ""}</b><small>${h.opponent ? `${esc(CLUB.name)} — ${esc(h.opponent)} · <strong>${esc(h.score.replace(":", " : "))}</strong>` : "Соперник уточняется"}</small></div><span class="pill pill--loss">${esc(h.result)}</span></div>`).join("")}</div>`;
     },
     matches() {
       const up = [...MATCHES].sort((a, b) => a.date.localeCompare(b.date));
@@ -196,13 +202,18 @@
       return `<h1 class="page-title">О клубе</h1><p class="page-sub">${esc(CLUB.tagline)}</p>
         <div class="club"><img src="${EMBLEM}" alt="Эмблема ${esc(CLUB.name)}">
           <div>${CLUB.about.map((p) => `<p>${esc(p)}</p>`).join("")}
-            <dl class="facts"><div><dt>Титулов АПЛ</dt><dd>${TROPHIES.length}</dd></div><div><dt>Игроков</dt><dd>${squad().length}</dd></div><div><dt>Форма</dt><dd>${esc(CLUB.colors)}</dd></div><div><dt>Статус</dt><dd>Любители</dd></div></dl>
+            <dl class="facts"><div><dt>Основан</dt><dd>${CLUB.founded}</dd></div><div><dt>Стадион</dt><dd>${esc(CLUB.stadium)}</dd></div><div><dt>Капитан и тренер</dt><dd>${esc((player(CLUB.captain) || {}).name || "")}</dd></div><div><dt>Титулов АПЛ</dt><dd>${TROPHIES.length}</dd></div><div><dt>Игроков</dt><dd>${squad().length}</dd></div><div><dt>Главный соперник</dt><dd>${esc(CLUB.rival)}</dd></div></dl>
           </div></div>
+        <h2 class="section-title">Легендарные матчи</h2>
+        ${CLUB.legends.map((l) => `<div class="legend"><span class="label">${esc(l.title)}</span>
+          <div class="legend__score"><span>${esc(l.home)}</span><b>${esc(l.score.replace(":", " : "))}</b><span>${esc(l.away)}</span></div><p>${esc(l.text)}</p></div>`).join("")}
         <h2 class="section-title">Трофеи</h2>${trophiesBlock()}
         <h2 class="section-title">Индивидуальные награды</h2>
         <div class="awards">${PLAYERS.filter((p) => awardsOf(p).length).sort((a, b) => awardsOf(b).length - awardsOf(a).length).map((p) => `<a class="award-card" href="#player-${p.id}">
             ${p.photo ? `<img src="${esc(p.photo)}" alt="" loading="lazy">` : ""}
-            <div><b>${esc(p.name)}</b><ul>${awardSummary(p).map((a) => `<li class="${a.kind === "ball" ? "is-ball" : ""}"><span class="trophy__cup">${awardIcon(a)}</span><span>${a.n > 1 ? `${a.n}× ` : ""}${esc(a.title)} <small>${a.seasons.map(esc).join(", ")}</small></span></li>`).join("")}</ul></div></a>`).join("")}</div>`;
+            <div><b>${esc(p.name)}</b><ul>${awardSummary(p).map((a) => `<li class="${a.kind === "ball" ? "is-ball" : ""}"><span class="trophy__cup">${awardIcon(a)}</span><span>${a.n > 1 ? `${a.n}× ` : ""}${esc(a.title)} <small>${a.seasons.map(esc).join(", ")}</small></span></li>`).join("")}</ul></div></a>`).join("")}</div>
+        <h2 class="section-title">Игроки в Instagram</h2>
+        <div class="ig-list">${PLAYERS.filter((p) => p.instagram).map((p) => `<a class="ig" href="${igUrl(p.instagram)}" target="_blank" rel="noopener">${IG}<span><b>${esc(p.name)}</b> @${esc(p.instagram)}</span></a>`).join("")}</div>`;
     },
   };
 
@@ -226,6 +237,7 @@
     const news = NEWS.filter((n) => (n.players || []).includes(p.id)).sort(byDate);
     const facts = [
       p.number != null && ["Номер", p.number],
+      isCaptain(p) && ["Роль", "Капитан и тренер"],
       p.position && ["Позиция", p.position],
       p.former && ["Статус", "Бывший игрок"],
       p.transfer && ["Новый клуб", p.transfer],
@@ -233,6 +245,7 @@
     return `<div class="profile">${playerPic(p)}<div class="profile__body"><span class="label">${p.former ? "Бывший игрок" : esc(p.position)}</span>
         <h1>${esc(p.name)}</h1><dl class="facts">${facts.map(([k, v]) => `<div><dt>${k}</dt><dd>${esc(v)}</dd></div>`).join("")}</dl>
         ${p.bio ? `<p>${esc(p.bio)}</p>` : ""}
+        ${p.instagram ? `<a class="ig" href="${igUrl(p.instagram)}" target="_blank" rel="noopener">${IG}<span>@${esc(p.instagram)}</span></a>` : ""}
         ${awardsOf(p).length ? `<h3 class="sub">Индивидуальные награды</h3><ul class="honors">${awardsOf(p).map((a) => `<li class="${a.kind === "ball" ? "is-ball" : ""}"><span class="trophy__cup">${awardIcon(a)}</span><span>${esc(a.title)} <small>${esc(a.season)}</small></span></li>`).join("")}</ul>` : ""}
         ${p.honors && p.honors.length ? `<h3 class="sub">Достижения</h3><ul class="honors">${p.honors.map((h) => `<li><span class="trophy__cup">${CUP}</span>${esc(h)}</li>`).join("")}</ul>` : ""}
         <a class="back" href="#team">← Весь состав</a></div></div>
@@ -255,7 +268,7 @@
         return st.slice(from, from + 5).map((t, k) => `<tr class="${t.name === CLUB.name ? "us" : ""}"><td>${from + k + 1}</td><td>${esc(t.name)}</td><td>${t.pts}</td></tr>`).join("");
       })()}</tbody></table><a class="back" href="#table">Вся таблица →</a></section>
       <section class="widget"><h2>Состав</h2><ul class="mini-squad">${squad()
-        .map((p) => `<li><a href="#player-${p.id}"><span class="n">${esc(p.number)}</span><span>${esc(p.name)}</span><small>${esc(p.short || p.position)}</small></a></li>`).join("")}</ul></section>
+        .map((p) => `<li><a href="#player-${p.id}"><span class="n">${esc(p.number)}</span><span>${esc(p.name)}${isCaptain(p) ? ` <span class="cap" title="Капитан">C</span>` : ""}</span><small>${esc(p.short || p.position)}</small></a></li>`).join("")}</ul></section>
       <section class="widget"><h2>Последний матч</h2>${(() => {
         const r = ourResults()[0];
         return r ? `<div class="last"><span>${esc(r.home)}</span><b>${esc(r.score.replace(":", " : "))}</b><span>${esc(r.away)}</span></div><small class="meta">${r.round}-й тур</small>` : `<span class="meta">Пока не сыгран</span>`;
