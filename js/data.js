@@ -20,7 +20,7 @@ window.PLAYERS = [
   { id: 3, number: 4,  name: "Платон Бирюков",    position: "Защитник", photo: "images/players/3.jpg", bio: "" },
   { id: 4, number: 11, name: "Везир Мирзоев",     position: "Вингер",   photo: "images/players/4.jpg", bio: "" },
   { id: 5, number: 7,  name: "Дэниэль Шаламов",   position: "Вингер",   photo: "images/players/5.jpg", bio: "" },
-  { id: 6, number: 10, name: "Роман Юдин",        position: "Центральный атакующий полузащитник", short: "ЦАП", photo: null, bio: "" },
+  { id: 6, number: 10, name: "Роман Юдин",        position: "Центральный атакующий полузащитник", short: "ЦАП", photo: "images/players/6.jpg", bio: "" },
 ];
 
 // image: путь к картинке новости, например "images/news/2.jpg". Без картинки — фирменная обложка.
