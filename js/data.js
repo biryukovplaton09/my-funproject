@@ -15,12 +15,12 @@ window.CLUB = {
 
 // photo: путь к фото, например "images/players/1.jpg". Если фото нет — показывается заглушка с номером.
 window.PLAYERS = [
-  { id: 1, number: 1,  name: "Игрок 1", position: "Вратарь",    photo: null, bio: "" },
-  { id: 2, number: 4,  name: "Игрок 2", position: "Защитник",   photo: null, bio: "" },
-  { id: 3, number: 5,  name: "Игрок 3", position: "Защитник",   photo: null, bio: "" },
-  { id: 4, number: 8,  name: "Игрок 4", position: "Полузащитник", photo: null, bio: "" },
-  { id: 5, number: 10, name: "Игрок 5", position: "Полузащитник", photo: null, bio: "" },
-  { id: 6, number: 9,  name: "Игрок 6", position: "Нападающий", photo: null, bio: "" },
+  { id: 1, number: 1,  name: "Павел Григориади",  position: "Вратарь",  photo: null, bio: "" },
+  { id: 2, number: 6,  name: "Тимур Хегай",       position: "Защитник", photo: null, bio: "" },
+  { id: 3, number: 4,  name: "Платон Бирюков",    position: "Защитник", photo: null, bio: "" },
+  { id: 4, number: 11, name: "Везир Мирзоев",     position: "Вингер",   photo: null, bio: "" },
+  { id: 5, number: 7,  name: "Дэниэль Шаламов",   position: "Вингер",   photo: null, bio: "" },
+  { id: 6, number: 10, name: "Роман Юдин",        position: "Центральный атакующий полузащитник", photo: null, bio: "" },
 ];
 
 // image: путь к картинке новости, например "images/news/2.jpg". Без картинки — фирменная обложка.
