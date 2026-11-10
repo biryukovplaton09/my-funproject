@@ -3,51 +3,35 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>СпортПульс</title>
+  <title>FC Durum</title>
   <meta name="claude:viewport-fit-sides" content="cover">
-  <meta name="description" content="Свежие новости футбола, хоккея, баскетбола, тенниса и единоборств.">
+  <meta name="description" content="Официальный сайт любительской футбольной команды FC Durum: новости, состав, матчи.">
+  <link rel="icon" href="images/emblem.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Unbounded:wght@600;800&display=swap">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
   <header class="header">
     <div class="container header__row">
-      <a href="#all" class="logo">Спорт<span>Пульс</span></a>
+      <a href="#news" class="logo"><img src="images/emblem.svg" alt=""><b>FC <span>Durum</span></b></a>
       <nav class="nav" id="nav"></nav>
       <button class="menu-btn" id="menu-btn" aria-label="Меню">☰</button>
     </div>
-    <div class="ticker"><div class="container"><b>LIVE</b> Хоккей: Команда В — Команда Г 1:1, 2-й период</div></div>
   </header>
+  <div class="stripes"></div>
 
   <main class="container layout">
-    <div>
-      <div id="home-view">
-        <section id="hero"></section>
-        <h2 class="section-title" id="feed-title">Последние новости</h2>
-        <section class="grid" id="feed"></section>
-      </div>
-      <div id="article-view" hidden>
-        <article class="article" id="article"></article>
-        <section id="related"></section>
-      </div>
-    </div>
-
-    <aside>
-      <section class="widget"><h2>Результаты</h2><ul id="scores"></ul></section>
-      <section class="widget"><h2>Популярное</h2><ol id="popular"></ol></section>
-      <section class="widget subscribe">
-        <h2>Подписка</h2>
-        <form id="subscribe-form">
-          <input id="subscribe-email" type="email" placeholder="Ваш email" required>
-          <button class="btn" type="submit">Подписаться</button>
-        </form>
-      </section>
-    </aside>
+    <div id="view"></div>
+    <aside id="sidebar"></aside>
   </main>
 
+  <div class="stripes"></div>
   <footer class="footer">
     <div class="container footer__row">
-      <div>© <span id="year"></span> СпортПульс — спортивные новости</div>
-      <div><a href="#all">О проекте</a><a href="#all">Контакты</a><a href="#all">Telegram</a></div>
+      <div class="footer__brand"><img src="images/emblem.svg" alt=""> © <span id="year"></span> FC Durum</div>
+      <div>Любительская футбольная команда</div>
     </div>
   </footer>
 
