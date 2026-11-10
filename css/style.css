@@ -103,7 +103,8 @@ time, .meta { color: var(--muted); font-size: .82rem; font-variant-numeric: tabu
 .player__info span { color: var(--muted); font-size: .85rem; }
 
 .profile { display: grid; grid-template-columns: 280px minmax(0, 1fr); gap: 28px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
-.profile .player__pic { height: 100%; }
+.profile { align-items: start; }
+.profile .player__pic { aspect-ratio: 4/5; }
 .profile__body { padding: 28px 28px 28px 0; }
 .profile__body h1 { margin: 6px 0 16px; font-size: clamp(1.5rem, 3vw, 2.2rem); }
 .facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; margin: 0 0 20px; }

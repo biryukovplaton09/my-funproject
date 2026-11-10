@@ -31,7 +31,7 @@
   }
   function playerPic(p) {
     return `<div class="player__pic">${p.photo ? `<img src="${esc(p.photo)}" alt="${esc(p.name)}" loading="lazy">` : jersey(p.number)}
-      ${p.photo ? `<span class="player__num">${esc(p.number)}</span>` : ""}</div>`;
+      </div>`;
   }
 
   function newsCard(n) {
@@ -117,7 +117,7 @@
       <section class="widget club-card"><img src="${EMBLEM}" alt=""><b>${esc(CLUB.name)}</b><small>${esc(CLUB.tagline)}</small>
         <span class="kit"><i></i> Форма: ${esc(CLUB.colors.toLowerCase())}</span></section>
       <section class="widget"><h2>Состав</h2><ul class="mini-squad">${[...PLAYERS].sort((a, b) => a.number - b.number)
-        .map((p) => `<li><a href="#player-${p.id}"><span class="n">${esc(p.number)}</span><span>${esc(p.name)}</span><small>${esc(p.position)}</small></a></li>`).join("")}</ul></section>
+        .map((p) => `<li><a href="#player-${p.id}"><span class="n">${esc(p.number)}</span><span>${esc(p.name)}</span><small>${esc(p.short || p.position)}</small></a></li>`).join("")}</ul></section>
       <section class="widget"><h2>Следующий матч</h2>${(() => {
         const m = MATCHES.filter((x) => x.status !== "played").sort((a, b) => a.date.localeCompare(b.date))[0];
         return m ? `<b>${esc(CLUB.name)} — ${esc(m.opponent)}</b><br><time>${fmtDate(m.date)}</time>` : `<span class="meta">Пока не назначен</span>`;
