@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Новость — СпортПульс</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="article">
+  <header class="header">
+    <div class="container header__row">
+      <a href="index.html" class="logo">Спорт<span>Пульс</span></a>
+      <nav class="nav" id="nav"></nav>
+      <button class="menu-btn" id="menu-btn" aria-label="Меню">☰</button>
+    </div>
+    <div class="ticker"><div class="container"><b>LIVE</b> Хоккей: Команда В — Команда Г 1:1, 2-й период</div></div>
+  </header>
+  <main class="container layout">
+    <div>
+      <article class="article" id="article"></article>
+      <section id="related"></section>
+    </div>
+    <aside>
+      <section class="widget"><h2>Результаты</h2><ul id="scores"></ul></section>
+      <section class="widget"><h2>Популярное</h2><ol id="popular"></ol></section>
+      <section class="widget subscribe">
+        <h2>Подписка</h2>
+        <form onsubmit="event.preventDefault(); this.innerHTML=&quot;<p>Спасибо за подписку!</p>&quot;;">
+          <input type="email" placeholder="Ваш email" required>
+          <button class="btn" type="submit">Подписаться</button>
+        </form>
+      </section>
+    </aside>
+  </main>
+  <footer class="footer">
+    <div class="container footer__row">
+      <div>© <span id="year"></span> СпортПульс — спортивные новости</div>
+      <div><a href="#">О проекте</a><a href="#">Контакты</a><a href="#">Telegram</a></div>
+    </div>
+  </footer>
+  <script src="js/data.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
