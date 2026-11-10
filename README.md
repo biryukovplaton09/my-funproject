@@ -29,8 +29,9 @@ images/news/        — картинки к новостям
 
 - **Новость** — объект в `NEWS` (`image: "images/news/2.jpg"`, `players: [1, 5]` — отметить игроков).
 - **Игрок** — объект в `PLAYERS` (`photo: "images/players/1.jpg"`).
-- **Матч** — объект в `MATCHES`:
-  `{ date: "2026-11-20T18:00:00", opponent: "Соперник", home: true, status: "played", score: "3:1" }`
+- **Результат матча АПЛ** — строка в `LEAGUE.results`: `{ round: 4, home: "FC Durum", away: "FC Shegly", score: "3:1" }`.
+  Таблица, форма команд и раздел «Матчи» пересчитываются сами.
+- **Ближайший матч** — объект в `MATCHES`: `{ date: "2026-11-20T18:00:00", opponent: "FC Shegly", home: true }`
 
 ## Обновление кэша
 

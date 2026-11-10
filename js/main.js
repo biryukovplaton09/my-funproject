@@ -45,28 +45,46 @@
       <div class="player__info"><b>${esc(p.name)}</b><span>${esc(p.position)}</span></div></a>`;
   }
 
-  function matchRow(m) {
-    let cls = "upcoming", res = "—";
-    if (m.status === "played" && m.score) {
-      const [a, b] = m.score.split(":").map(Number);
-      const us = m.home ? a : b, them = m.home ? b : a;
-      cls = us > them ? "win" : us < them ? "loss" : "draw";
-      res = esc(m.score);
-    }
-    const home = m.home ? CLUB.name : m.opponent, away = m.home ? m.opponent : CLUB.name;
-    return `<div class="match match--${cls}"><time class="when">${fmtDate(m.date)}</time>
-      <span class="team">${esc(home)}</span><span class="res">${res}</span><span class="team">${esc(away)}</span></div>`;
+  // Сыгранный матч из LEAGUE.results с точки зрения FC Durum
+  function resultRow(r) {
+    const [hg, ag] = r.score.split(":").map(Number);
+    const homeUs = r.home === CLUB.name;
+    const us = homeUs ? hg : ag, them = homeUs ? ag : hg;
+    const cls = us > them ? "win" : us < them ? "loss" : "draw";
+    const label = { win: "Победа", loss: "Поражение", draw: "Ничья" }[cls];
+    return `<div class="match match--${cls}"><span class="when">${r.round}-й тур · <b>${label}</b></span>
+      <span class="team">${esc(r.home)}</span><span class="res">${hg} : ${ag}</span><span class="team">${esc(r.away)}</span></div>`;
   }
+  function upcomingRow(m) {
+    const home = m.home ? CLUB.name : m.opponent, away = m.home ? m.opponent : CLUB.name;
+    return `<div class="match match--upcoming"><time class="when">${fmtDate(m.date)}</time>
+      <span class="team">${esc(home)}</span><span class="res">—</span><span class="team">${esc(away)}</span></div>`;
+  }
+  const ourResults = () => LEAGUE.results.filter((r) => r.home === CLUB.name || r.away === CLUB.name).sort((a, b) => b.round - a.round);
 
   const CUP = `<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M18 8h28v14c0 9-6 16-14 16s-14-7-14-16V8z" fill="currentColor"/>
     <path d="M18 12H9v5c0 6 4 10 10 11M46 12h9v5c0 6-4 10-10 11" fill="none" stroke="currentColor" stroke-width="4"/>
     <rect x="28" y="38" width="8" height="10" fill="currentColor"/><rect x="20" y="48" width="24" height="7" rx="2" fill="currentColor"/></svg>`;
 
   function standings() {
-    return LEAGUE.teams
-      .map((t) => ({ ...t, p: t.w + t.d + t.l, pts: t.w * 3 + t.d, gd: t.zab - t.prop }))
+    const t = {};
+    LEAGUE.teams.forEach((name) => (t[name] = { name, p: 0, w: 0, d: 0, l: 0, zab: 0, prop: 0, form: [] }));
+    for (const r of LEAGUE.results) {
+      const [hg, ag] = r.score.split(":").map(Number);
+      const h = t[r.home], a = t[r.away];
+      if (!h || !a) continue;
+      h.p++; a.p++; h.zab += hg; h.prop += ag; a.zab += ag; a.prop += hg;
+      if (hg > ag) { h.w++; a.l++; h.form.push("w"); a.form.push("l"); }
+      else if (hg < ag) { a.w++; h.l++; h.form.push("l"); a.form.push("w"); }
+      else { h.d++; a.d++; h.form.push("d"); a.form.push("d"); }
+    }
+    return Object.values(t)
+      .map((x) => ({ ...x, pts: x.w * 3 + x.d, gd: x.zab - x.prop }))
       .sort((a, b) => b.pts - a.pts || b.gd - a.gd || b.zab - a.zab || a.name.localeCompare(b.name));
   }
+
+  const FORM = { w: "В", d: "Н", l: "П" };
+  const formDots = (f) => `<span class="form">${f.slice(-5).map((x) => `<i class="f-${x}" title="${FORM[x]}">${FORM[x]}</i>`).join("")}</span>`;
 
   function trophiesBlock() {
     return `<div class="trophies">${TROPHIES.map((t) => `<div class="trophy"><span class="trophy__cup">${CUP}</span>
@@ -91,19 +109,23 @@
     table() {
       const rows = standings().map((t, i) => `<tr class="${t.name === CLUB.name ? "us" : ""}">
           <td class="pos">${i + 1}</td><td class="tname">${esc(t.name)}</td><td>${t.p}</td><td>${t.w}</td><td>${t.d}</td><td>${t.l}</td>
-          <td class="goals">${t.zab}–${t.prop}</td><td>${t.gd > 0 ? "+" : ""}${t.gd}</td><td class="pts">${t.pts}</td></tr>`).join("");
+          <td class="goals">${t.zab}–${t.prop}</td><td>${t.gd > 0 ? "+" : ""}${t.gd}</td><td class="pts">${t.pts}</td><td class="formcol">${formDots(t.form)}</td></tr>`).join("");
       return `<h1 class="page-title">Таблица ${esc(LEAGUE.name)}</h1><p class="page-sub">Сезон ${esc(LEAGUE.season)} · ${LEAGUE.teams.length} команд</p>
         <div class="table-wrap"><table class="standings">
-          <thead><tr><th>#</th><th class="tname">Команда</th><th title="Игры">И</th><th title="Победы">В</th><th title="Ничьи">Н</th><th title="Поражения">П</th><th class="goals" title="Забито–пропущено">Мячи</th><th title="Разница мячей">±</th><th title="Очки">О</th></tr></thead>
+          <thead><tr><th>#</th><th class="tname">Команда</th><th title="Игры">И</th><th title="Победы">В</th><th title="Ничьи">Н</th><th title="Поражения">П</th><th class="goals" title="Забито–пропущено">Мячи</th><th title="Разница мячей">±</th><th title="Очки">О</th><th class="formcol">Форма</th></tr></thead>
           <tbody>${rows}</tbody></table></div>
         <p class="meta">При равенстве очков выше команда с лучшей разницей мячей, затем — с большим числом забитых.</p>`;
     },
     matches() {
-      const up = MATCHES.filter((m) => m.status !== "played").sort((a, b) => a.date.localeCompare(b.date));
-      const played = MATCHES.filter((m) => m.status === "played").sort(byDate);
-      return `<h1 class="page-title">Матчи</h1><p class="page-sub">Расписание и результаты ${esc(CLUB.name)}</p>
-        <h2 class="section-title">Ближайшие</h2>${up.length ? `<div class="matches">${up.map(matchRow).join("")}</div>` : `<div class="empty">Ближайшие матчи пока не объявлены.</div>`}
-        <h2 class="section-title">Результаты</h2>${played.length ? `<div class="matches">${played.map(matchRow).join("")}</div>` : `<div class="empty">Сыгранных матчей пока нет.</div>`}`;
+      const up = [...MATCHES].sort((a, b) => a.date.localeCompare(b.date));
+      const played = ourResults();
+      const me = standings().find((t) => t.name === CLUB.name);
+      return `<h1 class="page-title">Матчи</h1><p class="page-sub">${esc(LEAGUE.name)} ${esc(LEAGUE.season)} · ${me.w} В · ${me.d} Н · ${me.l} П · мячи ${me.zab}–${me.prop}</p>
+        <h2 class="section-title">Ближайшие</h2>${up.length ? `<div class="matches">${up.map(upcomingRow).join("")}</div>` : `<div class="empty">Ближайшие матчи пока не объявлены.</div>`}
+        <h2 class="section-title">Результаты</h2>${played.length ? `<div class="matches">${played.map(resultRow).join("")}</div>` : `<div class="empty">Сыгранных матчей пока нет.</div>`}
+        <h2 class="section-title">Все матчи по турам</h2>${[...new Set(LEAGUE.results.map((r) => r.round))].sort((a, b) => b - a).map((rd) => `
+          <details class="round"${rd === Math.max(...LEAGUE.results.map((r) => r.round)) ? " open" : ""}><summary>${rd}-й тур</summary>
+          <div class="round__list">${LEAGUE.results.filter((r) => r.round === rd).map((r) => `<div class="rline${r.home === CLUB.name || r.away === CLUB.name ? " us" : ""}"><span>${esc(r.home)}</span><b>${esc(r.score.replace(":", " : "))}</b><span>${esc(r.away)}</span></div>`).join("")}</div></details>`).join("")}`;
     },
     club() {
       return `<h1 class="page-title">О клубе</h1><p class="page-sub">${esc(CLUB.tagline)}</p>
@@ -152,8 +174,12 @@
       })()}</tbody></table><a class="back" href="#table">Вся таблица →</a></section>
       <section class="widget"><h2>Состав</h2><ul class="mini-squad">${[...PLAYERS].sort((a, b) => a.number - b.number)
         .map((p) => `<li><a href="#player-${p.id}"><span class="n">${esc(p.number)}</span><span>${esc(p.name)}</span><small>${esc(p.short || p.position)}</small></a></li>`).join("")}</ul></section>
+      <section class="widget"><h2>Последний матч</h2>${(() => {
+        const r = ourResults()[0];
+        return r ? `<div class="last"><span>${esc(r.home)}</span><b>${esc(r.score.replace(":", " : "))}</b><span>${esc(r.away)}</span></div><small class="meta">${r.round}-й тур</small>` : `<span class="meta">Пока не сыгран</span>`;
+      })()}</section>
       <section class="widget"><h2>Следующий матч</h2>${(() => {
-        const m = MATCHES.filter((x) => x.status !== "played").sort((a, b) => a.date.localeCompare(b.date))[0];
+        const m = [...MATCHES].sort((a, b) => a.date.localeCompare(b.date))[0];
         return m ? `<b>${esc(CLUB.name)} — ${esc(m.opponent)}</b><br><time>${fmtDate(m.date)}</time>` : `<span class="meta">Пока не назначен</span>`;
       })()}</section>`;
   }

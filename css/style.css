@@ -10,6 +10,7 @@
   --red: #d7262f;
   --red-deep: #8f1219;
   --gold: #e0b341;
+  --win: #2f9e57;
   --ink: #0b0a0a;          /* шапка и подвал — всегда тёмные */
   --on-ink: #f3efee;
   --font-display: "Unbounded", "Arial Black", Arial, sans-serif;
@@ -116,7 +117,7 @@ time, .meta { color: var(--muted); font-size: .82rem; font-variant-numeric: tabu
 /* Matches */
 .matches { display: grid; gap: 10px; }
 .match { display: grid; grid-template-columns: 110px minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 14px; background: var(--surface); border: 1px solid var(--border); border-left: 4px solid var(--border); border-radius: var(--radius); padding: 14px 18px; }
-.match--win { border-left-color: #2f9e57; }
+.match--win { border-left-color: var(--win); }
 .match--loss { border-left-color: var(--red); }
 .match--draw { border-left-color: var(--muted); }
 .match--upcoming { border-left-color: #c9a227; }
@@ -214,3 +215,21 @@ time, .meta { color: var(--muted); font-size: .82rem; font-variant-numeric: tabu
   .standings .goals { display: none; }
   .standings .pos { width: 26px; }
 }
+
+/* Form & rounds */
+.form { display: inline-flex; gap: 3px; }
+.form i { font-style: normal; width: 20px; height: 20px; border-radius: 4px; display: grid; place-items: center; font-size: .66rem; font-weight: 800; color: #fff; }
+.f-w { background: var(--win); } .f-d { background: #8a817f; } .f-l { background: var(--red); }
+.standings .formcol { text-align: left; }
+.match .when b { color: var(--text); }
+.round { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 10px; }
+.round summary { cursor: pointer; padding: 12px 16px; font-weight: 800; font-family: var(--font-display); font-size: .9rem; }
+.round__list { padding: 0 16px 10px; }
+.rline { display: grid; grid-template-columns: minmax(0, 1fr) 64px minmax(0, 1fr); gap: 8px; padding: 8px 0; border-top: 1px solid var(--border); font-size: .93rem; }
+.rline span:last-child { text-align: right; }
+.rline b { text-align: center; font-variant-numeric: tabular-nums; }
+.rline.us { color: var(--red); font-weight: 700; }
+.last { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: 8px; align-items: center; font-size: .9rem; font-weight: 600; }
+.last span:last-child { text-align: right; }
+.last b { font-family: var(--font-display); background: var(--surface-2); padding: 3px 8px; border-radius: 6px; font-variant-numeric: tabular-nums; }
+@media (max-width: 600px) { .standings .formcol { display: none; } }
