@@ -18,7 +18,7 @@ window.PLAYERS = [
   { id: 1, number: 1,  name: "Павел Григориади",  position: "Вратарь",  photo: "images/players/1.jpg", bio: "" },
   { id: 2, number: 6,  name: "Тимур Хегай",       position: "Защитник", photo: "images/players/2.jpg", bio: "" },
   { id: 3, number: 4,  name: "Платон Бирюков",    position: "Защитник", photo: "images/players/3.jpg", bio: "" },
-  { id: 4, number: 11, name: "Везир Мирзоев",     position: "Вингер",   photo: null, bio: "" },
+  { id: 4, number: 11, name: "Везир Мирзоев",     position: "Вингер",   photo: "images/players/4.jpg", bio: "" },
   { id: 5, number: 7,  name: "Дэниэль Шаламов",   position: "Вингер",   photo: null, bio: "" },
   { id: 6, number: 10, name: "Роман Юдин",        position: "Центральный атакующий полузащитник", short: "ЦАП", photo: null, bio: "" },
 ];
