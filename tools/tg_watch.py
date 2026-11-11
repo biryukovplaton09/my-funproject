@@ -4,6 +4,11 @@ T = os.environ["TELEGRAM_BOT_TOKEN"]; CHAT = -5395734577
 def api(m, q=""):
     return json.load(urllib.request.urlopen(f"https://api.telegram.org/bot{T}/{m}{q}", timeout=70))
 me = api("getMe")["result"]; BOT_ID, BOT_UN = me["id"], "@" + me["username"].lower()
+BOT_IDS = {BOT_ID}; NAMES = [BOT_UN, "ангелин", "angelin"]
+U = os.environ.get("TELEGRAM_ULTRAS_TOKEN")
+if U:
+    um = json.load(urllib.request.urlopen(f"https://api.telegram.org/bot{U}/getMe", timeout=30))["result"]
+    BOT_IDS.add(um["id"]); NAMES += ["@" + um["username"].lower(), "педро", "pedro"]
 deadline = time.time() + 6600
 while time.time() < deadline:
     try:
@@ -17,7 +22,7 @@ while time.time() < deadline:
         txt = (m.get("text") or m.get("caption") or "")
         r = m.get("reply_to_message") or {}
         low = txt.lower()
-        if BOT_UN in low or "ангелин" in low or "angelin" in low or r.get("from", {}).get("id") == BOT_ID:
+        if any(n in low for n in NAMES) or r.get("from", {}).get("id") in BOT_IDS:
             hits.append((u["update_id"], m["message_id"], m.get("from", {}).get("first_name")))
     if hits:
         print("MENTION", hits); break
