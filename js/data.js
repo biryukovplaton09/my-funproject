@@ -28,14 +28,14 @@ window.CLUB = {
 window.PLAYERS = [
   {
     id: 1, number: 1, name: "Павел Григориади", position: "Вратарь", instagram: "p.grigoriadii", photo: "images/players/1.jpg",
-    nickname: "Бургер", born: 2008, foot: "Правая", nationality: "Германия", flag: "de", prevClub: "Бавария",
+    nickname: "Бургер", born: 2005, foot: "Правая", nationality: "Германия", flag: "de", prevClub: "Бавария",
     favPlayer: "Мануэль Нойер", favClub: "Бавария", trait: "Пенальтист",
     bio: "Пришёл в FC Durum из «Баварии». Вратарём стал случайно: однажды отбил удар лицом — и с тех пор из ворот его уже не выпускали. При этом Павел ещё и штатный пенальтист команды.",
     stats: { goals: 1, assists: 2, note: "Гол — с пенальти" },
   },
   {
     id: 2, number: 6, name: "Тимур Хегай", position: "Защитник", instagram: "xegaii", photo: "images/players/2.jpg",
-    nickname: "Кулагерский монстр", born: 2008, foot: "Обе (одинаково плохо)", nationality: "Испания", flag: "es", prevClub: "Барселона",
+    nickname: "Кулагерский монстр", born: 2005, foot: "Обе (одинаково плохо)", nationality: "Испания", flag: "es", prevClub: "Барселона",
     favPlayer: "Лионель Месси", favClub: "Барселона", trait: "Финт Зидана",
     bio: "Пришёл в FC Durum из «Барселоны». Амбидекстр: одинаково уверенно — и одинаково плохо — бьёт с обеих ног. Его фирменный приём — финт Зидана. Самая известная история: в финале Тимур «привёз» пенальти в собственные ворота.",
     stats: { goals: 2, assists: 2 },
@@ -43,7 +43,7 @@ window.PLAYERS = [
   },
   {
     id: 3, number: 4, name: "Платон Бирюков", position: "Защитник", instagram: "biriukov_platon", photo: "images/players/3.jpg",
-    nickname: "Умный человек в очках", born: 2009, foot: "Правая", nationality: "Франция", flag: "fr", prevClub: "Реал Мадрид",
+    nickname: "Умный человек в очках", born: 2005, foot: "Правая", nationality: "Франция", flag: "fr", prevClub: "Реал Мадрид",
     favPlayer: "Роналду, Зидан, Мбаппе", favClub: "Реал Мадрид", trait: "Подкат",
     bio: "Пришёл в FC Durum из «Реал Мадрида». Главное оружие — подкат. Самая известная история: в игре против Mambet FC Платон забил ножницами — правда, в свои ворота. Зато красиво.",
     stats: { goals: 4, assists: 1 },
@@ -51,7 +51,7 @@ window.PLAYERS = [
   },
   {
     id: 4, number: 11, name: "Везир Мирзоев", position: "Вингер", instagram: "awanteya", photo: "images/players/4.jpg",
-    nickname: "Бородатый", born: 2008, foot: "Правая", nationality: "Аргентина, Бразилия", flag: ["ar", "br"], prevClub: "Барселона",
+    nickname: "Бородатый", born: 2005, foot: "Правая", nationality: "Аргентина, Бразилия", flag: ["ar", "br"], prevClub: "Барселона",
     favPlayer: "Ламин Ямаль", favClub: "Барселона", trait: "Навес",
     bio: "Пришёл в FC Durum из «Барселоны». Главное оружие — навес с фланга. А ещё Везир — мастер симуляции: падает так эффектно, что в команде его часто называют «Плавцом» или «Дельфином».",
     stats: { goals: 6, assists: 2 },
@@ -59,7 +59,7 @@ window.PLAYERS = [
   },
   {
     id: 5, number: 7, name: "Дэниэль Шаламов", position: "Вингер", instagram: "freyah0", photo: "images/players/5.jpg",
-    nickname: "Бэн", born: 2008, foot: "Правая", nationality: "Россия", flag: "ru", prevClub: "Реал Мадрид",
+    nickname: "Бэн", born: 2005, foot: "Правая", nationality: "Россия", flag: "ru", prevClub: "Реал Мадрид",
     favPlayer: "Криштиану Роналду", favClub: "Реал Мадрид", trait: "Пушечный удар",
     bio: "Пришёл в FC Durum из «Реал Мадрида». Фирменное оружие — пушечный удар: на одном из тренировочных матчей Дэн сломал брату руку. На игры приезжает на «Гелике» — с видом главной звезды лиги.",
     stats: { goals: 9, assists: 6 },
@@ -67,7 +67,7 @@ window.PLAYERS = [
   },
   {
     id: 6, number: 10, name: "Роман Юдин", position: "Центральный атакующий полузащитник", short: "ЦАП", instagram: "yudin_obman", photo: "images/players/6.jpg",
-    nickname: "Алкаш", born: 2008, foot: "Обе", nationality: "Англия", flag: "en", prevClub: "Рубин (РПЛ)",
+    nickname: "Алкаш", born: 2005, foot: "Обе", nationality: "Англия", flag: "en", prevClub: "Рубин (РПЛ)",
     favPlayer: "Букайо Сака", favClub: "Арсенал", trait: "Может в одиночку обыграть всех 11",
     bio: "Пришёл в FC Durum из «Рубина» — по клубной легенде, оттуда его выгнали за слишком бурные вечеринки. Говорят, однажды Рома выиграл матч после такой ночи в одиночку. А ещё он забил хет-трик «Барселоне», перепутав её с «Локомотивом», и на пресс-конференции выдал: «Это ваша Барса? Бомжи».",
     stats: { goals: 10, assists: 11 },
