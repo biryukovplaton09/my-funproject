@@ -3,7 +3,7 @@
 # чтобы все три бота могли решить, отвечать ли. Упоминания помечаются отдельно.
 # Ничего не подтверждает и не отправляет. Токены — только из переменных окружения.
 import json, os, time, urllib.request
-CHAT = -5395734577
+CHAT = -1004492566302
 TOKENS = [t for t in (os.environ.get("TELEGRAM_BOT_TOKEN"), os.environ.get("TELEGRAM_ULTRAS_TOKEN"), os.environ.get("TELEGRAM_HATER_TOKEN")) if t]
 def api(tok, m, q=""):
     return json.load(urllib.request.urlopen(f"https://api.telegram.org/bot{tok}/{m}{q}", timeout=40))
