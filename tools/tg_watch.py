@@ -1,5 +1,6 @@
 # Сторож Telegram-группы FC Durum: раз в 2 минуты смотрит новые сообщения (через всех ботов, кто в группе),
-# и завершается, когда видит упоминание Ангелины/Педро, их имена или ответ на их сообщения.
+# и завершается, когда в группе есть любое новое сообщение от людей (обработанные подтверждаются offset-ом),
+# чтобы все три бота могли решить, отвечать ли. Упоминания помечаются отдельно.
 # Ничего не подтверждает и не отправляет. Токены — только из переменных окружения.
 import json, os, time, urllib.request
 CHAT = -5395734577
@@ -22,10 +23,11 @@ while time.time() < deadline:
             if not m or m.get("chat", {}).get("id") != CHAT: continue
             low = (m.get("text") or m.get("caption") or "").lower()
             r = m.get("reply_to_message") or {}
-            if any(n in low for n in NAMES) or r.get("from", {}).get("id") in BOT_IDS:
-                hits[m["message_id"]] = m.get("from", {}).get("first_name")
+            if m.get("from", {}).get("is_bot"): continue
+            tag = "MENTION" if (any(n in low for n in NAMES) or r.get("from", {}).get("id") in BOT_IDS) else "msg"
+            hits[m["message_id"]] = (m.get("from", {}).get("first_name"), tag)
     if hits:
-        print("MENTION", sorted(hits.items())); break
+        print("NEW", sorted(hits.items())); break
     time.sleep(120)
 else:
     print("TIMEOUT")
