@@ -302,7 +302,7 @@
         <h2 class="section-title">Индивидуальные награды</h2>
         <div class="awards">${PLAYERS.filter((p) => awardsOf(p).length).sort((a, b) => awardsOf(b).length - awardsOf(a).length).map((p) => `<a class="award-card" href="#player-${p.id}">
             ${p.photo ? `<img src="${esc(p.photo)}" alt="" loading="lazy">` : ""}
-            <div><b>${esc(p.name)}</b><ul>${awardSummary(p).map((a) => `<li class="${a.kind === "ball" ? "is-ball" : ""}"><span class="trophy__cup">${awardIcon(a)}</span><span>${a.n > 1 ? `${a.n}× ` : ""}${esc(a.title)} <small>${a.seasons.map(esc).join(", ")}</small></span></li>`).join("")}</ul></div></a>`).join("")}</div>
+            <div><b>${esc(p.name)}</b><ul>${awardSummary(p).map((a) => `<li class="${a.kind === "ball" ? "is-ball" : ""}${a.medal ? " medal-" + a.medal : ""}"><span class="trophy__cup">${awardIcon(a)}</span><span>${a.n > 1 ? `${a.n}× ` : ""}${esc(a.title)}${a.team ? ` (${esc(a.team)})` : ""} <small>${a.seasons.map(esc).join(", ")}</small></span></li>`).join("")}</ul></div></a>`).join("")}</div>
         <h2 class="section-title">Игроки в Instagram</h2>
         <div class="ig-list">${PLAYERS.filter((p) => p.instagram).map((p) => `<a class="ig" href="${igUrl(p.instagram)}" target="_blank" rel="noopener">${IG}<span><b>${esc(p.name)}</b> @${esc(p.instagram)}</span></a>`).join("")}</div>`;
     },
@@ -355,7 +355,7 @@
         ${p.bio ? `<p>${esc(p.bio)}</p>` : ""}
         ${p.stats ? `<h3 class="sub">Сезон ${esc(LEAGUE.season)} · все турниры</h3><div class="pstats"><div><b>${p.stats.goals || 0}</b><span>${plural(p.stats.goals || 0, "гол", "гола", "голов")}</span></div><div><b>${p.stats.assists || 0}</b><span>${plural(p.stats.assists || 0, "передача", "передачи", "передач")}</span></div>${p.stats.note ? `<small class="meta">${esc(p.stats.note)}</small>` : ""}</div>` : ""}
         ${p.instagram ? `<a class="ig" href="${igUrl(p.instagram)}" target="_blank" rel="noopener">${IG}<span>@${esc(p.instagram)}</span></a>` : ""}
-        ${awardsOf(p).length ? `<h3 class="sub">Индивидуальные награды</h3><ul class="honors">${awardsOf(p).map((a) => `<li class="${a.kind === "ball" ? "is-ball" : ""}"><span class="trophy__cup">${awardIcon(a)}</span><span>${esc(a.title)} <small>${esc(a.season)}</small></span></li>`).join("")}</ul>` : ""}
+        ${awardsOf(p).length ? `<h3 class="sub">Награды</h3><ul class="honors">${awardsOf(p).map((a) => `<li class="${a.kind === "ball" ? "is-ball" : ""}${a.medal ? " medal-" + a.medal : ""}"><span class="trophy__cup">${awardIcon(a)}</span><span>${esc(a.title)}${a.team ? ` ${flagSvg({ flag: a.flag, nationality: a.team }, "flag flag--mini")}${esc(a.team)}` : ""} <small>${esc(a.season)}</small></span></li>`).join("")}</ul>` : ""}
         ${p.honors && p.honors.length ? `<h3 class="sub">Достижения</h3><ul class="honors">${p.honors.map((h) => `<li><span class="trophy__cup">${CUP}</span>${esc(h)}</li>`).join("")}</ul>` : ""}
         <a class="back" href="${p.academy ? "#academy" : "#team"}">← ${p.academy ? "Академия" : "Весь состав"}</a></div></div>
       ${news.length ? `<h2 class="section-title">Новости об игроке</h2><div class="grid">${news.map(newsCard).join("")}</div>` : ""}

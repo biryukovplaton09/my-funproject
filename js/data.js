@@ -39,7 +39,7 @@ window.PLAYERS = [
     favPlayer: "Лионель Месси", favClub: "Барселона", trait: "Финт Зидана",
     bio: "Пришёл в FC Durum из «Барселоны». Амбидекстр: одинаково уверенно — и одинаково плохо — бьёт с обеих ног. Его фирменный приём — финт Зидана. Самая известная история: в финале Тимур «привёз» пенальти в собственные ворота.",
     stats: { goals: 2, assists: 2 },
-    awards: [{ title: "Лучший ассистент мира", season: "2024/25" }],
+    awards: [{ title: "Чемпион мира", season: "ЧМ-2026", team: "Испания", flag: "es", medal: "gold" }, { title: "Лучший ассистент мира", season: "2024/25" }],
   },
   {
     id: 3, number: 4, name: "Платон Бирюков", position: "Защитник", instagram: "biriukov_platon", photo: "images/players/3.jpg",
@@ -55,6 +55,7 @@ window.PLAYERS = [
     favPlayer: "Ламин Ямаль", favClub: "Барселона", trait: "Навес",
     bio: "Пришёл в FC Durum из «Барселоны». Главное оружие — навес с фланга. А ещё Везир — мастер симуляции: падает так эффектно, что в команде его часто называют «Плавцом» или «Дельфином».",
     stats: { goals: 6, assists: 2 },
+    awards: [{ title: "Финалист чемпионата мира", season: "ЧМ-2026", team: "Аргентина", flag: "ar", medal: "silver" }],
   },
   {
     id: 5, number: 7, name: "Дэниэль Шаламов", position: "Вингер", instagram: "freyah0", photo: "images/players/5.jpg",
@@ -70,7 +71,7 @@ window.PLAYERS = [
     favPlayer: "Букайо Сака", favClub: "Арсенал", trait: "Может в одиночку обыграть всех 11",
     bio: "Пришёл в FC Durum из «Рубина» — по клубной легенде, оттуда его выгнали за слишком бурные вечеринки. Говорят, однажды Рома выиграл матч после такой ночи в одиночку. А ещё он забил хет-трик «Барселоне», перепутав её с «Локомотивом», и на пресс-конференции выдал: «Это ваша Барса? Бомжи».",
     stats: { goals: 10, assists: 11 },
-    awards: [{ title: "Золотой мяч", season: "2025/26", kind: "ball" }, { title: "Лучший бомбардир АПЛ", season: "2023/24" }],
+    awards: [{ title: "Бронзовый призёр чемпионата мира", season: "ЧМ-2026", team: "Англия", flag: "en", medal: "bronze" }, { title: "Золотой мяч", season: "2025/26", kind: "ball" }, { title: "Лучший бомбардир АПЛ", season: "2023/24" }],
   },
 
   // Академия: academy: true — показываются на вкладке «Академия» в «Составе» (без фото — заглушка-футболка)
@@ -81,7 +82,7 @@ window.PLAYERS = [
 
   // Анкета (необязательно): nickname, born (год), foot, nationality + flag (код страны: de, es, fr, it, pt, br, ar, gb, en (Англия), ru, il, kz, tr, us; два флага — ["ru", "il"]), prevClub, favPlayer, favClub, trait,
   // stats: { goals, assists } — за текущий сезон во всех турнирах.
-  // awards — индивидуальные награды; kind: "ball" — значок Золотого мяча.
+  // awards — награды; kind: "ball" — значок Золотого мяча; medal: gold/silver/bronze + team/flag — награды сборной.
   // Бывшие игроки: former: true — показываются отдельным блоком в «Составе»
   {
     id: 7, number: 8, name: "Альмир Дё", position: "Левый вингер", instagram: "alm1r.d", photo: "images/players/7.jpg", former: true,

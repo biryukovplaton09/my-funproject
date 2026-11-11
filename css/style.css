@@ -401,3 +401,10 @@ img.comment__ava { object-fit: cover; }
 .callup b { font-family: var(--font-display); font-size: .9rem; color: #fff; padding: 0 8px; }
 .callup small { color: #a39b99; font-size: .78rem; }
 @media (prefers-reduced-motion: reduce) { .callup { transition: none; } .callup:hover { transform: none; } }
+
+/* World Cup medals */
+.honors li.medal-silver .trophy__cup, .awards li.medal-silver .trophy__cup { color: var(--silver); }
+.honors li.medal-bronze .trophy__cup, .awards li.medal-bronze .trophy__cup { color: #c07a3e; }
+.honors li.medal-gold, .awards li.medal-gold { font-weight: 800; }
+.honors .flag--mini { margin: 0 4px 0 6px; }
+.honors li svg.flag--mini { width: 18px; height: 12px; vertical-align: -1px; }
