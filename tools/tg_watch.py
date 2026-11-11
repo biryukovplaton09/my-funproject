@@ -1,31 +1,31 @@
-# Ждёт новое сообщение в группе, где упомянут бот или ответ боту. Ничего не подтверждает и не отвечает.
+# Сторож Telegram-группы FC Durum: раз в 2 минуты смотрит новые сообщения (через всех ботов, кто в группе),
+# и завершается, когда видит упоминание Ангелины/Педро, их имена или ответ на их сообщения.
+# Ничего не подтверждает и не отправляет. Токены — только из переменных окружения.
 import json, os, time, urllib.request
-T = os.environ["TELEGRAM_BOT_TOKEN"]; CHAT = -5395734577
-def api(m, q=""):
-    return json.load(urllib.request.urlopen(f"https://api.telegram.org/bot{T}/{m}{q}", timeout=70))
-me = api("getMe")["result"]; BOT_ID, BOT_UN = me["id"], "@" + me["username"].lower()
-BOT_IDS = {BOT_ID}; NAMES = [BOT_UN, "ангелин", "angelin"]
-U = os.environ.get("TELEGRAM_ULTRAS_TOKEN")
-if U:
-    um = json.load(urllib.request.urlopen(f"https://api.telegram.org/bot{U}/getMe", timeout=30))["result"]
-    BOT_IDS.add(um["id"]); NAMES += ["@" + um["username"].lower(), "педро", "pedro"]
+CHAT = -5395734577
+TOKENS = [t for t in (os.environ.get("TELEGRAM_BOT_TOKEN"), os.environ.get("TELEGRAM_ULTRAS_TOKEN"), os.environ.get("TELEGRAM_HATER_TOKEN")) if t]
+def api(tok, m, q=""):
+    return json.load(urllib.request.urlopen(f"https://api.telegram.org/bot{tok}/{m}{q}", timeout=40))
+BOT_IDS, NAMES = set(), ["ангелин", "angelin", "педро", "pedro", "хейтер"]
+for t in TOKENS:
+    try:
+        me = api(t, "getMe")["result"]; BOT_IDS.add(me["id"]); NAMES.append("@" + me["username"].lower())
+    except Exception: pass
 deadline = time.time() + 6600
 while time.time() < deadline:
-    try:
-        ups = api("getUpdates", "?timeout=50")["result"]
-    except Exception as e:
-        time.sleep(30); continue
-    hits = []
-    for u in ups:
-        m = u.get("message") or u.get("edited_message")
-        if not m or m.get("chat", {}).get("id") != CHAT: continue
-        txt = (m.get("text") or m.get("caption") or "")
-        r = m.get("reply_to_message") or {}
-        low = txt.lower()
-        if any(n in low for n in NAMES) or r.get("from", {}).get("id") in BOT_IDS:
-            hits.append((u["update_id"], m["message_id"], m.get("from", {}).get("first_name")))
+    hits = {}
+    for t in TOKENS:
+        try: ups = api(t, "getUpdates")["result"]
+        except Exception: continue
+        for u in ups:
+            m = u.get("message") or u.get("edited_message")
+            if not m or m.get("chat", {}).get("id") != CHAT: continue
+            low = (m.get("text") or m.get("caption") or "").lower()
+            r = m.get("reply_to_message") or {}
+            if any(n in low for n in NAMES) or r.get("from", {}).get("id") in BOT_IDS:
+                hits[m["message_id"]] = m.get("from", {}).get("first_name")
     if hits:
-        print("MENTION", hits); break
-    time.sleep(60)
+        print("MENTION", sorted(hits.items())); break
+    time.sleep(120)
 else:
     print("TIMEOUT")
