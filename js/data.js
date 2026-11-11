@@ -59,7 +59,7 @@ window.PLAYERS = [
   },
   {
     id: 5, number: 7, name: "Дэниэль Шаламов", position: "Вингер", instagram: "freyah0", photo: "images/players/5.jpg",
-    born: 2008, foot: "Правая", nationality: "Россия", flag: "ru", prevClub: "Реал Мадрид",
+    nickname: "Бэн", born: 2008, foot: "Правая", nationality: "Россия", flag: "ru", prevClub: "Реал Мадрид",
     favPlayer: "Криштиану Роналду", favClub: "Реал Мадрид", trait: "Пушечный удар",
     bio: "Пришёл в FC Durum из «Реал Мадрида». Фирменное оружие — пушечный удар: на одном из тренировочных матчей Дэн сломал брату руку. На игры приезжает на «Гелике» — с видом главной звезды лиги.",
     stats: { goals: 9, assists: 6 },
