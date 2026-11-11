@@ -408,3 +408,4 @@ img.comment__ava { object-fit: cover; }
 .honors li.medal-gold, .awards li.medal-gold { font-weight: 800; }
 .honors .flag--mini { margin: 0 4px 0 6px; }
 .honors li svg.flag--mini { width: 18px; height: 12px; vertical-align: -1px; }
+.article__body p.q { font-weight: 800; margin: 1.4em 0 .4em; padding-left: 12px; border-left: 3px solid var(--red); }

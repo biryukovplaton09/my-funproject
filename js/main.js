@@ -315,7 +315,7 @@
     const more = [...NEWS].sort(byDate).filter((x) => x.id !== n.id).slice(0, 3);
     return `<article class="article"><div class="article__head"><span class="label">Новости клуба</span>
         <h1>${esc(n.title)}</h1><time>${fmtDate(n.date)}</time></div>${n.image ? `<figure class="article__fig"><img src="${esc(n.image)}" alt="${esc(n.imageCaption || n.title)}">${n.imageCaption ? `<figcaption>${esc(n.imageCaption)}</figcaption>` : ""}</figure>` : cover(n)}
-        <div class="article__body"><p class="lead">${esc(n.excerpt)}</p>${n.body.map((p) => `<p>${esc(p)}</p>`).join("")}
+        <div class="article__body"><p class="lead">${esc(n.excerpt)}</p>${n.body.map((p) => (typeof p === "object" && p.q ? `<p class="q">${esc(p.q)}</p>` : `<p>${esc(p)}</p>`)).join("")}
         ${n.callups && n.callups.length ? `<h3 class="sub">Вызовы в сборные</h3><div class="callups">${n.callups.map((c) => { const p = player(c.player); if (!p) return "";
           return `<a class="callup" href="#player-${p.id}">${p.photo ? `<img class="callup__pic" src="${esc(p.photo)}" alt="">` : ""}
             ${flagSvg({ flag: c.flag, nationality: c.team }, "flag callup__flag")}<span class="callup__team">${esc(c.team)}</span><b>${esc(p.name)}</b><small>№${esc(p.number)} · ${esc(p.short || p.position)}</small></a>`; }).join("")}</div>` : ""}
