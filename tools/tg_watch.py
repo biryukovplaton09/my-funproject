@@ -7,7 +7,7 @@ CHAT = -5395734577
 TOKENS = [t for t in (os.environ.get("TELEGRAM_BOT_TOKEN"), os.environ.get("TELEGRAM_ULTRAS_TOKEN"), os.environ.get("TELEGRAM_HATER_TOKEN")) if t]
 def api(tok, m, q=""):
     return json.load(urllib.request.urlopen(f"https://api.telegram.org/bot{tok}/{m}{q}", timeout=40))
-BOT_IDS, NAMES = set(), ["ангелин", "angelin", "педро", "pedro", "хейтер"]
+BOT_IDS, NAMES = set(), ["ангелин", "angelin", "педро", "pedro", "пабло", "pablo", "хейтер", "андрей"]
 for t in TOKENS:
     try:
         me = api(t, "getMe")["result"]; BOT_IDS.add(me["id"]); NAMES.append("@" + me["username"].lower())
