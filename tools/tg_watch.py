@@ -20,11 +20,13 @@ while time.time() < deadline:
         except Exception: continue
         for u in ups:
             m = u.get("message") or u.get("edited_message")
-            if not m or m.get("chat", {}).get("id") != CHAT: continue
+            if not m: continue
+            chat = m.get("chat", {})
+            if chat.get("id") != CHAT and chat.get("type") != "private": continue
             low = (m.get("text") or m.get("caption") or "").lower()
             r = m.get("reply_to_message") or {}
             if m.get("from", {}).get("is_bot"): continue
-            tag = "MENTION" if (any(n in low for n in NAMES) or r.get("from", {}).get("id") in BOT_IDS) else "msg"
+            tag = "PRIVATE" if chat.get("type") == "private" else ("MENTION" if (any(n in low for n in NAMES) or r.get("from", {}).get("id") in BOT_IDS) else "msg")
             hits[m["message_id"]] = (m.get("from", {}).get("first_name"), tag)
     if hits:
         print("NEW", sorted(hits.items())); break
