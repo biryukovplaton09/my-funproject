@@ -91,8 +91,14 @@ def gen_image_imagen(prompt, key, aspect):
     return base64.b64decode(preds[0]["bytesBase64Encoded"])
 
 
-def gen_image_gemini(prompt, key, aspect):
-    body = {"contents": [{"parts": [{"text": prompt}]}],
+def gen_image_gemini(prompt, key, aspect, refs=()):
+    parts = []
+    for ref in refs:
+        mime = "image/png" if ref.lower().endswith(".png") else "image/jpeg"
+        parts.append({"inline_data": {"mime_type": mime,
+                                      "data": base64.b64encode(open(os.path.join(ROOT, ref), "rb").read()).decode()}})
+    parts.append({"text": prompt})
+    body = {"contents": [{"parts": parts}],
             "generationConfig": {"responseModalities": ["IMAGE"], "imageConfig": {"aspectRatio": aspect}}}
     res = request(f"{API}/models/{GEMINI_IMAGE_MODEL}:generateContent", key, body)
     for cand in res.get("candidates", []):
@@ -134,18 +140,22 @@ def main():
     p.add_argument("prompt", help="описание (лучше на английском — модели понимают его точнее)")
     p.add_argument("--engine", choices=["imagen", "gemini"], default="imagen", help="для картинок")
     p.add_argument("--aspect", default=None, help="16:9 (по умолчанию), 4:5 для игроков, 1:1, 9:16 …")
+    p.add_argument("--ref", action="append", default=[],
+                   help="фото-образец (можно несколько), например images/players/3.jpg; включает --engine gemini")
     p.add_argument("--name", help="имя файла без расширения")
     p.add_argument("--out", help="полный путь к файлу (относительно корня проекта)")
     a = p.parse_args()
     key = load_key()
 
+    if a.ref:
+        a.engine = "gemini"  # образцы понимает только Gemini Image
     if a.kind == "image":
         aspect = a.aspect or "16:9"
         if a.engine == "imagen" and aspect == "4:5":
             aspect = "3:4"  # Imagen не умеет 4:5 — ближайший вариант
         out = a.out or f"images/generated/{a.name or slug(a.prompt)}.jpg"
         out = os.path.join(ROOT, out) if not os.path.isabs(out) else out
-        img = gen_image_imagen(a.prompt, key, aspect) if a.engine == "imagen" else gen_image_gemini(a.prompt, key, aspect)
+        img = gen_image_imagen(a.prompt, key, aspect) if a.engine == "imagen" else gen_image_gemini(a.prompt, key, aspect, a.ref)
         save_image(img, out)
     else:
         aspect = a.aspect or "16:9"
