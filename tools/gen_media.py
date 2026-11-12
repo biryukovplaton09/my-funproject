@@ -25,7 +25,8 @@ import urllib.error
 import urllib.request
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-API = "https://generativelanguage.googleapis.com/v1beta"
+API = "https://generativelanguage.googleapis.com/v1beta"          # ключи AI Studio (AIza…)
+VERTEX_API = "https://aiplatform.googleapis.com/v1/publishers/google/models"  # ключи Vertex AI Express (AQ.…)
 
 IMAGEN_MODEL = "imagen-4.0-generate-001"
 GEMINI_IMAGE_MODEL = "gemini-2.5-flash-image"
@@ -46,7 +47,19 @@ def load_key():
     return key
 
 
+def is_vertex(key):
+    return key.startswith("AQ.")
+
+
+def model_url(model, method, key):
+    if is_vertex(key):
+        return f"{VERTEX_API}/{model}:{method}"
+    return f"{API}/models/{model}:{method}"
+
+
 def request(url, key, body=None, raw=False, timeout=300):
+    if is_vertex(key) and "aiplatform.googleapis.com" in url:
+        url += ("&" if "?" in url else "?") + "key=" + key
     data = json.dumps(body).encode() if body is not None else None
     req = urllib.request.Request(url, data=data, method="POST" if data else "GET")
     req.add_header("x-goog-api-key", key)
@@ -84,7 +97,7 @@ def save_image(img_bytes, out):
 def gen_image_imagen(prompt, key, aspect):
     body = {"instances": [{"prompt": prompt}],
             "parameters": {"sampleCount": 1, "aspectRatio": aspect, "personGeneration": "allow_adult"}}
-    res = request(f"{API}/models/{IMAGEN_MODEL}:predict", key, body)
+    res = request(model_url(IMAGEN_MODEL, "predict", key), key, body)
     preds = res.get("predictions") or []
     if not preds or "bytesBase64Encoded" not in preds[0]:
         sys.exit("Imagen не вернул картинку: " + json.dumps(res, ensure_ascii=False)[:800])
@@ -98,9 +111,9 @@ def gen_image_gemini(prompt, key, aspect, refs=()):
         parts.append({"inline_data": {"mime_type": mime,
                                       "data": base64.b64encode(open(os.path.join(ROOT, ref), "rb").read()).decode()}})
     parts.append({"text": prompt})
-    body = {"contents": [{"parts": parts}],
+    body = {"contents": [{"role": "user", "parts": parts}],
             "generationConfig": {"responseModalities": ["IMAGE"], "imageConfig": {"aspectRatio": aspect}}}
-    res = request(f"{API}/models/{GEMINI_IMAGE_MODEL}:generateContent", key, body)
+    res = request(model_url(GEMINI_IMAGE_MODEL, "generateContent", key), key, body)
     for cand in res.get("candidates", []):
         for part in cand.get("content", {}).get("parts", []):
             inline = part.get("inlineData") or part.get("inline_data")
@@ -111,7 +124,7 @@ def gen_image_gemini(prompt, key, aspect, refs=()):
 
 def gen_video(prompt, key, aspect, out, wait_max=900):
     body = {"instances": [{"prompt": prompt}], "parameters": {"aspectRatio": aspect}}
-    op = request(f"{API}/models/{VEO_MODEL}:predictLongRunning", key, body)
+    op = request(model_url(VEO_MODEL, "predictLongRunning", key), key, body)
     name = op.get("name")
     if not name:
         sys.exit("Veo не принял задачу: " + json.dumps(op, ensure_ascii=False)[:800])
@@ -121,9 +134,19 @@ def gen_video(prompt, key, aspect, out, wait_max=900):
         if time.time() - start > wait_max:
             sys.exit(f"Veo: не дождался за {wait_max} с (операция {name})")
         time.sleep(10)
-        op = request(f"{API}/{name}", key)
+        if is_vertex(key):
+            op = request(model_url(VEO_MODEL, "fetchPredictOperation", key), key, {"operationName": name})
+        else:
+            op = request(f"{API}/{name}", key)
     if "error" in op:
         sys.exit("Veo ошибка: " + json.dumps(op["error"], ensure_ascii=False)[:800])
+    if is_vertex(key):
+        vids = op.get("response", {}).get("videos") or []
+        if not vids or "bytesBase64Encoded" not in vids[0]:
+            sys.exit("Veo не вернул видео: " + json.dumps(op, ensure_ascii=False)[:800])
+        os.makedirs(os.path.dirname(out), exist_ok=True)
+        open(out, "wb").write(base64.b64decode(vids[0]["bytesBase64Encoded"]))
+        return out
     samples = (op.get("response", {}).get("generateVideoResponse", {}) or {}).get("generatedSamples") or []
     if not samples:
         sys.exit("Veo не вернул видео: " + json.dumps(op, ensure_ascii=False)[:800])
