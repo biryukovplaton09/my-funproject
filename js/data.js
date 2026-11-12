@@ -324,7 +324,7 @@ window.LEAGUE = {
   // Сыгранные матчи: home — хозяева, away — гости, score — "голы хозяев:голы гостей"
   results: [
     // 1-й тур
-    { round: 1, home: "FC Durum", away: "FC Starpery", score: "1:2" },
+    { round: 1, home: "FC Starpery", away: "FC Durum", score: "2:1" },
     { round: 1, home: "FC Airan", away: "Beshbarmak FC", score: "6:0" },
     { round: 1, home: "Samsa United", away: "FC Shegly", score: "2:2" },
     { round: 1, home: "Kurt Rangers", away: "Mambet FC", score: "2:1" },
@@ -344,7 +344,7 @@ window.LEAGUE = {
     { round: 2, home: "Kurt Rangers", away: "Beshbarmak FC", score: "2:2" },
     { round: 2, home: "Samsa United", away: "Kumis Wanderers", score: "4:3" },
     // 3-й тур
-    { round: 3, home: "FC Durum", away: "FC Doner Abay", score: "2:2" },
+    { round: 3, home: "FC Doner Abay", away: "FC Durum", score: "2:2" },
     { round: 3, home: "FC Lagman", away: "FC Starpery", score: "2:1" },
     { round: 3, home: "FC Airan", away: "Samsa United", score: "2:1" },
     { round: 3, home: "Chak-Chak FC", away: "Kurt Rangers", score: "2:1" },
@@ -354,7 +354,7 @@ window.LEAGUE = {
     { round: 3, home: "FC Lepeshka", away: "FC Manty", score: "3:1" },
     { round: 3, home: "Kumis Wanderers", away: "FC Shegly", score: "0:1" },
     // 4-й тур
-    { round: 4, home: "FC Durum", away: "FC Lagman", score: "12:6" },
+    { round: 4, home: "FC Lagman", away: "FC Durum", score: "6:12" },
     { round: 4, home: "Samsa United", away: "FC Manty", score: "1:0" },
     { round: 4, home: "FC Airan", away: "FC Shaurma", score: "1:1" },
     { round: 4, home: "FC Doner Abay", away: "Chak-Chak FC", score: "1:1" },
