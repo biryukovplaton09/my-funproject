@@ -408,4 +408,7 @@ img.comment__ava { object-fit: cover; }
 .honors li.medal-gold, .awards li.medal-gold { font-weight: 800; }
 .honors .flag--mini { margin: 0 4px 0 6px; }
 .honors li svg.flag--mini { width: 18px; height: 12px; vertical-align: -1px; }
+.article__inline { margin: 1.4em 0; }
+.article__inline img { width: 100%; max-width: 560px; display: block; margin: 0 auto; border-radius: 8px; }
+.article__inline figcaption { text-align: center; font-size: .85rem; color: var(--muted); margin-top: 6px; }
 .article__body p.q { font-weight: 800; margin: 1.4em 0 .4em; padding-left: 12px; border-left: 3px solid var(--red); }
