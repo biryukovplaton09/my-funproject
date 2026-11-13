@@ -71,7 +71,8 @@
         </div></div>`;
     document.body.appendChild(box);
     requestAnimationFrame(() => box && box.classList.add("push--in"));
-    box.querySelector(".push__no").onclick = () => { store.set(onYes ? "no" : "hint"); close(); renderFooter(); };
+    // «Нет» не запоминаем — при следующем открытии сайта плашка появится снова.
+    box.querySelector(".push__no").onclick = () => { if (!onYes) store.set("hint"); close(); renderFooter(); };
     if (onYes) box.querySelector(".push__yes").onclick = async (e) => {
       const btn = e.currentTarget; btn.disabled = true; btn.textContent = "Подключаем…";
       try { await onYes(); store.set("yes"); box.querySelector(".push__body").innerHTML = "<b>Готово!</b><p>Теперь новинки FC Durum будут приходить вам уведомлениями.</p>"; setTimeout(close, 2600); }
@@ -120,14 +121,14 @@
 
   function start() {
     renderFooter();
-    if (supported && Notification.permission === "granted") {
-      if (store.get() !== "no") resync().then(renderFooter);
+    if (supported && Notification.permission === "granted" && store.get() !== "no") {
+      resync().then(renderFooter);         // уже подписан — плашку не показываем
       return;
     }
-    if (store.get()) return;               // уже ответил «Присылать», «Нет» или «Понятно»
-    if (supported && Notification.permission === "denied") return;
+    if (supported && Notification.permission === "denied") return;   // запрещено в браузере — кнопка не сработает
     if (!supported && !(ios && !standalone)) return;
-    setTimeout(offer, 2500);
+    if (!supported && store.get() === "hint") return;                 // подсказку для iPhone показываем один раз
+    setTimeout(offer, 2500);               // не подписан (в т.ч. нажимал «Нет») — показываем при каждом открытии
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start); else start();
 })();
