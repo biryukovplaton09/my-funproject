@@ -71,7 +71,7 @@
         </div></div>`;
     document.body.appendChild(box);
     requestAnimationFrame(() => box && box.classList.add("push--in"));
-    box.querySelector(".push__no").onclick = () => { if (onYes) store.set("no"); close(); renderFooter(); };
+    box.querySelector(".push__no").onclick = () => { store.set(onYes ? "no" : "hint"); close(); renderFooter(); };
     if (onYes) box.querySelector(".push__yes").onclick = async (e) => {
       const btn = e.currentTarget; btn.disabled = true; btn.textContent = "Подключаем…";
       try { await onYes(); store.set("yes"); box.querySelector(".push__body").innerHTML = "<b>Готово!</b><p>Теперь новинки FC Durum будут приходить вам уведомлениями.</p>"; setTimeout(close, 2600); }
@@ -112,12 +112,20 @@
     };
   }
 
+  // Уже разрешил уведомления на этом устройстве — плашку не показываем никогда,
+  // а подписку тихо обновляем (если браузер её сменил или запись в базе пропала).
+  async function resync() {
+    try { await subscribe(); store.set("yes"); } catch (_) {}
+  }
+
   function start() {
     renderFooter();
-    if (supported && "serviceWorker" in navigator && store.get() === "yes") registration().catch(() => {});
-    const seen = store.get();
-    if (seen) return;
-    if (supported && Notification.permission !== "default") return;
+    if (supported && Notification.permission === "granted") {
+      if (store.get() !== "no") resync().then(renderFooter);
+      return;
+    }
+    if (store.get()) return;               // уже ответил «Присылать», «Нет» или «Понятно»
+    if (supported && Notification.permission === "denied") return;
     if (!supported && !(ios && !standalone)) return;
     setTimeout(offer, 2500);
   }
