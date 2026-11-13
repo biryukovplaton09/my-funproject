@@ -126,7 +126,7 @@ def player_hash(p):
 
 def snapshot(d):
     return {"news": max(n["id"] for n in d["news"]), "posts": max([p["id"] for p in d["posts"]] or [0]),
-            "players": {str(p["id"]): player_hash(p) for p in d["players"]}}
+            "players": {str(p["id"]): p for p in d["players"]}}
 
 
 def short(s, n=110):
@@ -134,28 +134,103 @@ def short(s, n=110):
     return s if len(s) <= n else s[: n - 1].rstrip() + "…"
 
 
+def first_sentence(text, n=120):
+    t = re.sub(r"\s+", " ", text or "").strip()
+    m = re.match(r"(.+?[.!?…])(\s|$)", t)
+    return short(m.group(1) if m and len(m.group(1)) >= 15 else t, n)
+
+
+def plural(n, one, few, many):
+    n = abs(int(n))
+    if n % 10 == 1 and n % 100 != 11:
+        return f"{n} {one}"
+    if 2 <= n % 10 <= 4 and not 12 <= n % 100 <= 14:
+        return f"{n} {few}"
+    return f"{n} {many}"
+
+
+FIELD = {"number": "номер", "nickname": "прозвище", "position": "позиция", "bio": "биография", "photo": "фото",
+         "nationality": "сборная", "prevClub": "прошлый клуб", "favPlayer": "любимый игрок", "favClub": "любимый клуб",
+         "trait": "фирменный приём", "foot": "рабочая нога", "instagram": "инстаграм", "transfer": "трансфер"}
+
+
+def describe_player(old, new):
+    """Коротко: что изменилось в анкете."""
+    parts = []
+    if old.get("former") != new.get("former") and new.get("former"):
+        return "🔄 Уход из клуба", f"{new['name']} покидает FC Durum" + (f" — переход в «{new['transfer']}»" if new.get("transfer") else "") + "."
+    if old.get("academy") and not new.get("academy"):
+        return "⬆️ Переведён в основу", f"{new['name']} из академии теперь в основном составе FC Durum."
+    os_, ns = old.get("stats") or {}, new.get("stats") or {}
+    if os_ != ns:
+        g, a = ns.get("goals", 0), ns.get("assists", 0)
+        dg, da = g - os_.get("goals", 0), a - os_.get("assists", 0)
+        bits = []
+        if dg > 0: bits.append(f"+{plural(dg, 'гол', 'гола', 'голов')}")
+        if da > 0: bits.append(f"+{plural(da, 'передача', 'передачи', 'передач')}")
+        parts.append(("статистика: " + ", ".join(bits) + f" (всего {g}+{a})") if bits else f"статистика: {g}+{a}")
+    oa = {json.dumps(x, sort_keys=True, ensure_ascii=False) for x in old.get("awards") or []}
+    newaw = [x for x in new.get("awards") or [] if json.dumps(x, sort_keys=True, ensure_ascii=False) not in oa]
+    for aw in newaw[:2]:
+        parts.append(f"новая награда — «{aw.get('title')}» ({aw.get('season')})")
+    for k, label in FIELD.items():
+        if old.get(k) != new.get(k):
+            if k == "number" and new.get(k):
+                parts.append(f"новый номер — {new[k]}")
+            elif k == "photo":
+                parts.append("новое фото")
+            elif k == "bio":
+                parts.append("обновлена биография")
+            elif k == "nickname" and new.get(k):
+                parts.append(f"новое прозвище — «{new[k]}»")
+            else:
+                parts.append(f"{label}: {new.get(k) or '—'}")
+    if newaw and len(parts) == len(newaw[:2]):
+        title = "🏆 Новая награда"
+    elif ns != os_ and len(parts) == 1:
+        title = "📊 Статистика игрока"
+    else:
+        title = "✏️ Анкета игрока"
+    return title, short(f"{new['name']}: " + "; ".join(parts or ["анкета обновлена"]) + ".", 150)
+
+
 def changes(d, st):
     msgs = []
+    names = {x["id"]: x for x in d["players"]}
     for n in sorted((n for n in d["news"] if n["id"] > st["news"]), key=lambda n: n["id"]):
-        msgs.append({"title": "Новость FC Durum", "body": short(n["title"], 140), "url": f"#news-{n['id']}",
-                     "image": n.get("image"), "tag": f"news-{n['id']}"})
+        msgs.append({"kind": "news", "title": "📰 Новость FC Durum", "body": short(n["title"], 150),
+                     "url": f"#news-{n['id']}", "image": n.get("image"), "tag": f"news-{n['id']}"})
     for p in sorted((p for p in d["posts"] if p["id"] > st["posts"]), key=lambda p: p["id"]):
-        who = next((x["name"] for x in d["players"] if x["id"] == p.get("author")), None) or "FC Durum"
-        msgs.append({"title": f"Новый пост в Ленте: {who}", "body": short(p.get("text", "")), "url": f"#post-{p['id']}",
+        pl = names.get(p.get("author"))
+        who = pl["name"] if pl else "FC Durum"
+        msgs.append({"kind": "post", "title": f"💬 Лента · {who}", "body": first_sentence(p.get("text", "")),
+                     "url": f"#post-{p['id']}", "icon": (pl or {}).get("photo"), "image": p.get("image"),
                      "tag": f"post-{p['id']}"})
     old = st.get("players", {})
     for p in d["players"]:
         k = str(p["id"])
         if k not in old:
-            where = "в академию" if p.get("academy") else "в состав"
-            msgs.append({"title": "Изменения в составе", "body": f"{p['name']} — новый игрок, добавлен {where}.",
-                         "url": f"#player-{p['id']}", "tag": f"player-{p['id']}"})
+            if p.get("academy"):
+                t, b = "🎓 Новичок академии", f"{p['name']} ({p.get('position', 'игрок').lower()}) пополнил академию FC Durum."
+            else:
+                num = f", №{p['number']}" if p.get("number") else ""
+                t, b = "🆕 Новичок в составе", f"{p['name']} ({p.get('position', 'игрок').lower()}{num}) — в составе FC Durum."
+        elif isinstance(old[k], dict):
+            if old[k] == p:
+                continue
+            t, b = describe_player(old[k], p)
         elif old[k] != player_hash(p):
-            msgs.append({"title": "Обновлена анкета игрока", "body": f"{p['name']}: на сайте изменения в анкете.",
-                         "url": f"#player-{p['id']}", "tag": f"player-{p['id']}"})
-    gone = [k for k in old if k not in {str(p["id"]) for p in d["players"]}]
-    if gone:
-        msgs.append({"title": "Изменения в составе", "body": "Состав FC Durum обновлён.", "url": "#team", "tag": "team"})
+            t, b = "✏️ Анкета игрока", f"{p['name']}: анкета обновлена."
+        else:
+            continue
+        msgs.append({"kind": "player", "title": t, "body": b, "url": f"#player-{p['id']}",
+                     "icon": p.get("photo"), "tag": f"player-{p['id']}"})
+    for k in old:
+        if k not in {str(p["id"]) for p in d["players"]}:
+            nm = old[k].get("name") if isinstance(old[k], dict) else None
+            msgs.append({"kind": "player", "title": "👋 Изменения в составе",
+                         "body": f"{nm} больше не в составе FC Durum." if nm else "Состав FC Durum обновлён.",
+                         "url": "#team", "tag": "team"})
     return msgs
 
 
@@ -165,6 +240,7 @@ def main():
     ap.add_argument("--init", action="store_true")
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--title"); ap.add_argument("--body"); ap.add_argument("--url", default="")
+    ap.add_argument("--kind", default="news", choices=["news", "post", "player"])
     a = ap.parse_args()
 
     d = site_data() if (a.auto or a.init) else None
@@ -176,12 +252,12 @@ def main():
         st = json.load(open(STATE)) if os.path.exists(STATE) else snapshot(d)
         msgs = changes(d, st)
         if len(msgs) > 3:  # не заваливать подписчиков: при пачке — одно сводное уведомление
-            msgs = [{"title": "Новинки на сайте FC Durum", "body": f"{len(msgs)} обновлений: " +
-                     "; ".join(short(m["body"], 40) for m in msgs[:3]) + "…", "url": msgs[0]["url"], "tag": "digest"}]
+            msgs = [{"kind": msgs[0]["kind"], "title": f"🔥 {plural(len(msgs), 'новинка', 'новинки', 'новинок')} на сайте FC Durum",
+                     "body": "; ".join(short(m["body"], 45) for m in msgs[:3]) + "…", "url": msgs[0]["url"], "tag": "digest"}]
     else:
         if not a.title:
             sys.exit("нужно --auto или --title")
-        msgs = [{"title": a.title, "body": a.body or "", "url": a.url}]
+        msgs = [{"kind": a.kind, "title": a.title, "body": a.body or "", "url": a.url}]
 
     if not msgs:
         print("новинок нет")

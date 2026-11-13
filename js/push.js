@@ -119,6 +119,13 @@
     try { await subscribe(); store.set("yes"); } catch (_) {}
   }
 
+  // Звук при новом уведомлении, когда сайт открыт: свисток / тройной свисток / гудок.
+  const SOUNDS = { news: "sounds/whistle.mp3", post: "sounds/chirp.mp3", player: "sounds/horn.mp3" };
+  if ("serviceWorker" in navigator) navigator.serviceWorker.addEventListener("message", (e) => {
+    if (!e.data || e.data.type !== "fcd-push") return;
+    try { const a = new Audio(SOUNDS[e.data.kind] || SOUNDS.news); a.volume = 0.7; a.play().catch(() => {}); } catch (_) {}
+  });
+
   function start() {
     renderFooter();
     if (supported && Notification.permission === "granted" && store.get() !== "no") {
