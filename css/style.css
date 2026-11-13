@@ -420,3 +420,24 @@ img.comment__ava { object-fit: cover; }
 .article__inline img { width: 100%; max-width: 560px; display: block; margin: 0 auto; border-radius: 8px; }
 .article__inline figcaption { text-align: center; font-size: .85rem; color: var(--muted); margin-top: 6px; }
 .article__body p.q { font-weight: 800; margin: 1.4em 0 .4em; padding-left: 12px; border-left: 3px solid var(--red); }
+
+/* ---------- Плашка push-уведомлений ---------- */
+.push { position: fixed; z-index: 1000; left: 50%; bottom: max(16px, env(safe-area-inset-bottom, 0px)); transform: translate(-50%, 20px); opacity: 0;
+  width: min(460px, calc(100% - 32px)); display: flex; gap: 14px; align-items: flex-start; padding: 16px 18px;
+  background: var(--ink); color: var(--on-ink); border: 1px solid #2e2a29; border-top: 3px solid var(--red); border-radius: var(--radius);
+  box-shadow: 0 12px 40px rgba(0,0,0,.45); transition: opacity .25s ease, transform .25s ease; }
+.push--in { opacity: 1; transform: translate(-50%, 0); }
+.push__logo { width: 40px; flex: none; margin-top: 2px; }
+.push__body { flex: 1; min-width: 0; font-size: .92rem; line-height: 1.45; }
+.push__body b { font-family: var(--font-display); font-size: .95rem; display: block; margin-bottom: 4px; }
+.push__body p { margin: 0 0 12px; color: #c9c1bf; }
+.push__err { color: #ff8a8f !important; }
+.push__btns { display: flex; gap: 10px; flex-wrap: wrap; }
+.push__yes { background: var(--red); color: #fff; border: 0; border-radius: 8px; padding: 9px 18px; font: 700 .9rem var(--font-body); cursor: pointer; }
+.push__yes:hover { background: var(--red-deep); }
+.push__yes:disabled { opacity: .7; cursor: default; }
+.push__no { background: transparent; color: #c9c1bf; border: 1px solid #3a3433; border-radius: 8px; padding: 9px 18px; font: 600 .9rem var(--font-body); cursor: pointer; }
+.push__no:hover { color: #fff; border-color: #5a5150; }
+.push-toggle { background: none; border: 1px solid #3a3433; color: #c9c1bf; border-radius: 999px; padding: 6px 14px; font: 600 .82rem var(--font-body); cursor: pointer; }
+.push-toggle:hover { color: #fff; border-color: var(--red); }
+@media (prefers-reduced-motion: reduce) { .push { transition: none; } }

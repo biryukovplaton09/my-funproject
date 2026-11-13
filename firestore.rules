@@ -15,5 +15,16 @@ service cloud.firestore {
       allow delete: if request.auth != null && resource.data.uid == request.auth.uid;
       allow update: if false;
     }
+    // Подписки на push-уведомления (сайт пишет, tools/notify.py читает).
+    match /push_subs/{id} {
+      allow read: if true;
+      allow create, update: if request.resource.data.keys().hasOnly(['endpoint', 'p256dh', 'auth', 'createdAt'])
+        && request.resource.data.endpoint is string && request.resource.data.endpoint.size() <= 800
+        && request.resource.data.endpoint.matches('https://.+')
+        && request.resource.data.p256dh is string && request.resource.data.p256dh.size() <= 200
+        && request.resource.data.auth is string && request.resource.data.auth.size() <= 64
+        && request.resource.data.createdAt == request.time;
+      allow delete: if false;
+    }
   }
 }
