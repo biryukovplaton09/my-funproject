@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="400" viewBox="0 0 900 400">
+<rect width="900" height="400" fill="#fff"/>
+<g transform="translate(0,0)">
+<rect x="2" y="2" width="296" height="396" fill="none" stroke="#bbb"/>
+<text text-anchor="middle" x="150.0" y="28.0" font-size="16" fill="#000" font-family="DejaVu Serif">1. Точка O на высоте SK</text>
+<g transform="translate(0,20)">
+<line x1="143.3" y1="50.0" x2="40.0" y2="250.0" stroke="#000" stroke-width="2"/>
+<line x1="143.3" y1="50.0" x2="130.0" y2="290.0" stroke="#000" stroke-width="2"/>
+<line x1="143.3" y1="50.0" x2="260.0" y2="240.0" stroke="#000" stroke-width="2"/>
+<line x1="40.0" y1="250.0" x2="130.0" y2="290.0" stroke="#000" stroke-width="2"/>
+<line x1="130.0" y1="290.0" x2="260.0" y2="240.0" stroke="#000" stroke-width="2"/>
+<line x1="40.0" y1="250.0" x2="260.0" y2="240.0" stroke="#000" stroke-width="2" stroke-dasharray="7,5"/>
+<text x="137.3" y="40.0" font-size="18" fill="#000" font-family="DejaVu Serif" font-style="italic">S</text>
+<text x="20.0" y="256.0" font-size="18" fill="#000" font-family="DejaVu Serif" font-style="italic">A</text>
+<text x="124.0" y="314.0" font-size="18" fill="#000" font-family="DejaVu Serif" font-style="italic">B</text>
+<text x="268.0" y="246.0" font-size="18" fill="#000" font-family="DejaVu Serif" font-style="italic">C</text>
+<line x1="40.0" y1="250.0" x2="195.0" y2="265.0" stroke="#000" stroke-width="1.5" stroke-dasharray="7,5"/>
+<line x1="143.3" y1="50.0" x2="143.3" y2="260.0" stroke="#d0021b" stroke-width="2" stroke-dasharray="7,5"/>
+<circle cx="143.3" cy="260.0" r="3.5" fill="#000"/>
+<circle cx="143.3" cy="120.0" r="3.5" fill="#d0021b"/>
+<text x="149.3" y="276.0" font-size="18" fill="#000" font-family="DejaVu Serif" font-style="italic">K</text>
+<text x="151.3" y="125.0" font-size="18" fill="#d0021b" font-family="DejaVu Serif" font-style="italic">O</text>
+<text x="201.0" y="283.0" font-size="18" fill="#000" font-family="DejaVu Serif" font-style="italic">M</text>
+<text x="107.3" y="90.0" font-size="13" fill="#d0021b" font-family="DejaVu Serif" font-style="italic">1/3</text>
+<line x1="137.3" y1="50.0" x2="149.3" y2="50.0" stroke="#d0021b" stroke-width="2"/>
+<line x1="137.3" y1="120.0" x2="149.3" y2="120.0" stroke="#d0021b" stroke-width="2"/>
+</g>
+<text x="14.0" y="350.0" font-size="13" fill="#000" font-family="DejaVu Serif">SABC — правильная пирамида,</text>
+<text x="14.0" y="370.0" font-size="13" fill="#000" font-family="DejaVu Serif">SK — высота, O ∈ SK, SO = ⅓·SK</text>
+</g>
+<g transform="translate(300,0)">
+<rect x="2" y="2" width="296" height="396" fill="none" stroke="#bbb"/>
+<text text-anchor="middle" x="150.0" y="28.0" font-size="16" fill="#000" font-family="DejaVu Serif">2. Прямая a ⟂ (ABC)</text>
+<g transform="translate(0,20)">
+<line x1="143.3" y1="50.0" x2="40.0" y2="250.0" stroke="#000" stroke-width="2"/>
+<line x1="143.3" y1="50.0" x2="130.0" y2="290.0" stroke="#000" stroke-width="2"/>
+<line x1="143.3" y1="50.0" x2="260.0" y2="240.0" stroke="#000" stroke-width="2"/>
+<line x1="40.0" y1="250.0" x2="130.0" y2="290.0" stroke="#000" stroke-width="2"/>
+<line x1="130.0" y1="290.0" x2="260.0" y2="240.0" stroke="#000" stroke-width="2"/>
+<line x1="40.0" y1="250.0" x2="260.0" y2="240.0" stroke="#000" stroke-width="2" stroke-dasharray="7,5"/>
+<text x="137.3" y="40.0" font-size="18" fill="#000" font-family="DejaVu Serif" font-style="italic">S</text>
+<text x="20.0" y="256.0" font-size="18" fill="#000" font-family="DejaVu Serif" font-style="italic">A</text>
+<text x="124.0" y="314.0" font-size="18" fill="#000" font-family="DejaVu Serif" font-style="italic">B</text>
+<text x="268.0" y="246.0" font-size="18" fill="#000" font-family="DejaVu Serif" font-style="italic">C</text>
+<line x1="40.0" y1="250.0" x2="195.0" y2="265.0" stroke="#000" stroke-width="1.5" stroke-dasharray="7,5"/>
+<line x1="143.3" y1="15.0" x2="143.3" y2="50.0" stroke="#d0021b" stroke-width="2"/>
+<line x1="143.3" y1="50.0" x2="143.3" y2="260.0" stroke="#d0021b" stroke-width="2" stroke-dasharray="7,5"/>
+<line x1="143.3" y1="260.0" x2="143.3" y2="320.0" stroke="#d0021b" stroke-width="2"/>
+<circle cx="143.3" cy="260.0" r="3.5" fill="#000"/>
+<text x="149.3" y="276.0" font-size="18" fill="#000" font-family="DejaVu Serif" font-style="italic">K</text>
+<text x="201.0" y="283.0" font-size="18" fill="#000" font-family="DejaVu Serif" font-style="italic">M</text>
+<text x="151.3" y="27.0" font-size="18" fill="#d0021b" font-family="DejaVu Serif" font-style="italic">a</text>
+<polyline points="143.33333333333334,246.0 156.33333333333334,247.3 156.33333333333334,261.3" fill="none" stroke="#d0021b" stroke-width="1.5"/>
+</g>
+<text x="14.0" y="350.0" font-size="13" fill="#000" font-family="DejaVu Serif">a ⊃ SK, a ⟂ (ABC),</text>
+<text x="14.0" y="370.0" font-size="13" fill="#000" font-family="DejaVu Serif">K — центр ΔABC (K ∈ AM)</text>
+</g>
+<g transform="translate(600,0)">
+<rect x="2" y="2" width="296" height="396" fill="none" stroke="#bbb"/>
+<text text-anchor="middle" x="150.0" y="28.0" font-size="16" fill="#000" font-family="DejaVu Serif">3. Плоскость симметрии</text>
+<g transform="translate(0,20)">
+<polygon points="143.33333333333334,50 40,250 195.0,265.0" fill="#4a90e2" fill-opacity="0.3" stroke="none"/>
+<line x1="143.3" y1="50.0" x2="40.0" y2="250.0" stroke="#000" stroke-width="2"/>
+<line x1="143.3" y1="50.0" x2="130.0" y2="290.0" stroke="#000" stroke-width="2"/>
+<line x1="143.3" y1="50.0" x2="260.0" y2="240.0" stroke="#000" stroke-width="2"/>
+<line x1="40.0" y1="250.0" x2="130.0" y2="290.0" stroke="#000" stroke-width="2"/>
+<line x1="130.0" y1="290.0" x2="260.0" y2="240.0" stroke="#000" stroke-width="2"/>
+<line x1="40.0" y1="250.0" x2="260.0" y2="240.0" stroke="#000" stroke-width="2" stroke-dasharray="7,5"/>
+<text x="137.3" y="40.0" font-size="18" fill="#000" font-family="DejaVu Serif" font-style="italic">S</text>
+<text x="20.0" y="256.0" font-size="18" fill="#000" font-family="DejaVu Serif" font-style="italic">A</text>
+<text x="124.0" y="314.0" font-size="18" fill="#000" font-family="DejaVu Serif" font-style="italic">B</text>
+<text x="268.0" y="246.0" font-size="18" fill="#000" font-family="DejaVu Serif" font-style="italic">C</text>
+<line x1="143.3" y1="50.0" x2="195.0" y2="265.0" stroke="#1f5fae" stroke-width="2"/>
+<line x1="40.0" y1="250.0" x2="195.0" y2="265.0" stroke="#1f5fae" stroke-width="2" stroke-dasharray="7,5"/>
+<line x1="143.3" y1="50.0" x2="143.3" y2="260.0" stroke="#000" stroke-width="1.5" stroke-dasharray="7,5"/>
+<circle cx="143.3" cy="260.0" r="3.5" fill="#000"/>
+<circle cx="195.0" cy="265.0" r="3.5" fill="#000"/>
+<text x="139.3" y="278.0" font-size="18" fill="#000" font-family="DejaVu Serif" font-style="italic">K</text>
+<text x="201.0" y="283.0" font-size="18" fill="#000" font-family="DejaVu Serif" font-style="italic">M</text>
+<text x="60.0" y="180.0" font-size="20" fill="#1f5fae" font-family="DejaVu Serif" font-style="italic">α</text>
+</g>
+<text x="14.0" y="350.0" font-size="13" fill="#000" font-family="DejaVu Serif">α = (SAM), AM — медиана ΔABC,</text>
+<text x="14.0" y="370.0" font-size="13" fill="#000" font-family="DejaVu Serif">BM = MC; α проходит через SA</text>
+</g>
+</svg>
