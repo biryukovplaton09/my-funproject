@@ -28,6 +28,13 @@
     en: '<rect width="3" height="3" fill="#fff"/><rect x="1.2" width=".6" height="3" fill="#CE1124"/><rect y="1.2" width="3" height=".6" fill="#CE1124"/>',
     il: '<rect width="3" height="3" fill="#fff"/><rect y=".35" width="3" height=".35" fill="#0038B8"/><rect y="2.3" width="3" height=".35" fill="#0038B8"/><path d="M1.5 1 1.86 1.62H1.14zM1.5 2 1.14 1.38h.72z" fill="none" stroke="#0038B8" stroke-width=".09"/>',
     us: '<rect width="3" height="3" fill="#B22234"/><path d="M0 .35h3M0 .8h3M0 1.25h3M0 1.7h3M0 2.15h3M0 2.6h3" stroke="#fff" stroke-width=".22"/><rect width="1.3" height="1.5" fill="#3C3B6E"/>',
+    nl: '<rect width="3" height="1" fill="#AE1C28"/><rect y="1" width="3" height="1" fill="#fff"/><rect y="2" width="3" height="1" fill="#21468B"/>',
+    rs: '<rect width="3" height="1" fill="#C6363C"/><rect y="1" width="3" height="1" fill="#0C4076"/><rect y="2" width="3" height="1" fill="#fff"/>',
+    hr: '<rect width="3" height="1" fill="#FF0000"/><rect y="1" width="3" height="1" fill="#fff"/><rect y="2" width="3" height="1" fill="#171796"/><rect x="1.2" y=".75" width=".6" height=".9" fill="#FF0000"/>',
+    cz: '<rect width="3" height="1.5" fill="#fff"/><rect y="1.5" width="3" height="1.5" fill="#D7141A"/><path d="M0 0 1.5 1.5 0 3z" fill="#11457E"/>',
+    uz: '<rect width="3" height="1" fill="#0099B5"/><rect y="1" width="3" height="1" fill="#fff"/><rect y="2" width="3" height="1" fill="#1EB53A"/><rect y=".95" width="3" height=".08" fill="#CE1126"/><rect y="1.97" width="3" height=".08" fill="#CE1126"/>',
+    uy: '<rect width="3" height="3" fill="#fff"/><path d="M0 .5h3M0 1.17h3M0 1.83h3M0 2.5h3" stroke="#0038A8" stroke-width=".33"/><rect width="1.3" height="1.3" fill="#fff"/><circle cx=".65" cy=".65" r=".35" fill="#FCD116"/>',
+    ve: '<rect width="3" height="1" fill="#FFCC00"/><rect y="1" width="3" height="1" fill="#00247D"/><rect y="2" width="3" height="1" fill="#CF142B"/>',
   };
   let flagSeq = 0;
   // flag: "fr" или ["ru", "il"] — второй вариант делит флаг по диагонали
@@ -51,6 +58,7 @@
     { id: "table", name: "Таблица" },
     { id: "ucl", name: "ЛЧ" },
     { id: "matches", name: "Матчи" },
+    { id: "intl", name: "Сборные" },
     { id: "club", name: "О клубе" },
   ];
 
@@ -288,6 +296,46 @@
         <h2 class="section-title">Все матчи по турам</h2>${[...new Set(LEAGUE.results.map((r) => r.round))].sort((a, b) => b - a).map((rd) => `
           <details class="round"${rd === Math.max(...LEAGUE.results.map((r) => r.round)) ? " open" : ""}><summary>${rd}-й тур</summary>
           <div class="round__list">${LEAGUE.results.filter((r) => r.round === rd).map((r) => `<div class="rline${r.home === CLUB.name || r.away === CLUB.name ? " us" : ""}"><span>${esc(r.home)}</span><b>${esc(r.score.replace(":", " : "))}</b><span>${esc(r.away)}</span></div>`).join("")}</div></details>`).join("")}`;
+    },
+    intl() {
+      const N = window.NATIONAL || { matches: [] };
+      const rc = (r) => (+r >= 8 ? "is-top" : +r >= 7 ? "is-good" : +r >= 6 ? "is-mid" : "is-low");
+      const rf = (r) => esc(String(r).replace(".", ","));
+      const fl = (t) => flagSvg({ flag: t[1], nationality: t[0] }, "flag flag--mini");
+      const outcome = (m, side) => { const [h, a] = m.score.split(":").map(Number); const d = side === "home" ? h - a : a - h; return d > 0 ? "win" : d < 0 ? "loss" : "draw"; };
+      const stats = {};
+      N.matches.forEach((m) => m.players.forEach((x) => {
+        const s = stats[x.id] || (stats[x.id] = { id: x.id, team: m[x.team], gp: 0, min: 0, minKnown: true, goals: 0, saves: 0, rates: [], w: 0, d: 0, l: 0 });
+        s.gp++; s.goals += x.goals || 0; s.saves += x.saves || 0; s.rates.push(+x.rate);
+        if (x.min == null) s.minKnown = false; else s.min += x.min;
+        s[{ win: "w", draw: "d", loss: "l" }[outcome(m, x.team)]]++;
+      }));
+      const list = Object.values(stats).map((s) => ({ ...s, avg: s.rates.reduce((a, b) => a + b, 0) / s.rates.length, best: Math.max(...s.rates) })).sort((a, b) => b.avg - a.avg);
+      const all = N.matches.flatMap((m) => m.players.map((x) => ({ m, x })));
+      const top = all.reduce((a, b) => (+b.x.rate > +a.x.rate ? b : a), all[0]);
+      const goals = all.reduce((a, b) => a + (b.x.goals || 0), 0);
+      const wins = all.filter((o) => outcome(o.m, o.x.team) === "win").length;
+      const avgAll = all.reduce((a, b) => a + +b.x.rate, 0) / (all.length || 1);
+      const dates = [...new Set(N.matches.map((m) => m.date))].sort().reverse();
+      const card = (s) => { const p = player(s.id) || {};
+        return `<a class="nt-card" href="#player-${s.id}">${p.photo ? `<img src="${esc(p.photo)}" alt="" loading="lazy">` : ""}
+          <div class="nt-card__body"><b>${esc(p.name)}</b><small>${fl(s.team)}${esc(s.team[0])}</small>
+          <dl><div><dt>Матчи</dt><dd>${s.gp}</dd></div><div><dt>${s.saves ? "Сейвы" : "Голы"}</dt><dd>${s.saves || s.goals}</dd></div><div><dt>Мин.</dt><dd>${s.min}${s.minKnown ? "" : "+"}</dd></div><div><dt>В-Н-П</dt><dd>${s.w}-${s.d}-${s.l}</dd></div></dl></div>
+          <div class="nt-card__rate"><span class="rating__num ${rc(s.avg)}">${rf(s.avg.toFixed(2))}</span><small>средняя<br>лучшая ${rf(s.best.toFixed(1))}</small></div></a>`; };
+      const match = (m) => `<div class="nt-match">
+          <div class="nt-match__score"><span>${fl(m.home)}${esc(m.home[0])}</span><b>${esc(m.score.replace(":", " : "))}</b><span>${esc(m.away[0])}${fl(m.away)}</span></div>
+          ${m.players.map((x) => { const p = player(x.id) || {}; const o = outcome(m, x.team);
+            return `<div class="nt-pl"><span class="nt-pl__rate ${rc(x.rate)}">${rf(x.rate)}</span>
+              <div><a href="#player-${x.id}"><b>${esc(p.name)}</b></a> <span class="pill pill--${o}">${{ win: "Победа", draw: "Ничья", loss: "Поражение" }[o]}</span>
+              <small>${x.min != null ? `${x.min} мин` : "минуты уточняются"}${x.goals ? ` · ${"⚽".repeat(x.goals)}` : ""}${x.note ? ` · ${esc(x.note)}` : ""}</small></div></div>`; }).join("")}
+          ${m.news ? `<a class="nt-match__more" href="#news-${m.news}">Отчёт →</a>` : ""}</div>`;
+      return `<h1 class="page-title">Сборные</h1><p class="page-sub">Игроки ${esc(CLUB.name)} в национальных командах · ${esc(N.title || "")}</p>
+        <div class="nt-sum"><div><b>${N.matches.length}</b><span>${plural(N.matches.length, "матч", "матча", "матчей")}</span></div><div><b>${wins} из ${all.length}</b><span>побед с нашими</span></div><div><b>${goals}</b><span>${plural(goals, "гол", "гола", "голов")} наших</span></div><div><b>${rf(avgAll.toFixed(2))}</b><span>средняя оценка</span></div>
+          ${top ? `<div><b>${rf(top.x.rate)}</b><span>лучшая: ${esc((player(top.x.id) || {}).name || "")}</span></div>` : ""}</div>
+        <h2 class="section-title">Игроки</h2><div class="nt-cards">${list.map(card).join("")}</div>
+        <h2 class="section-title">Матчи</h2>
+        ${dates.map((d) => `<h3 class="nt-date">${new Date(d + "T00:00:00").toLocaleDateString("ru-RU", { day: "numeric", month: "long", weekday: "long" })}</h3><div class="nt-list">${N.matches.filter((m) => m.date === d).map(match).join("")}</div>`).join("")}
+        <p class="meta">Оценки — по данным матчевых отчётов на сайте. Цвет: зелёный — 8+, салатовый — 7+, жёлтый — 6+.</p>`;
     },
     club() {
       return `<h1 class="page-title">О клубе</h1><p class="page-sub">${esc(CLUB.tagline)}</p>

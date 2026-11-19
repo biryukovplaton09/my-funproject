@@ -788,6 +788,36 @@ window.NEWS = [
   },
 ];
 
+// Матчи сборных с участием игроков FC Durum (страница #intl «Сборные»).
+// { date, home: [название, флаг], away: [...], score: "3:2", news: id новости, players: [{ id, team: "home"|"away", min, goals, rate: "8.0", note }] }
+// min: null — минуты неизвестны. rate — строкой.
+window.NATIONAL = {
+  title: "Международная пауза · ноябрь 2026",
+  matches: [
+    { date: "2026-11-17", home: ["Россия", "ru"], away: ["Венесуэла", "ve"], score: "2:0", news: 26,
+      players: [{ id: 5, team: "home", min: null, goals: 2, rate: "8.8", note: "Дубль" }] },
+    { date: "2026-11-16", home: ["Нидерланды", "nl"], away: ["Германия", "de"], score: "0:5", news: 24,
+      players: [{ id: 1, team: "away", min: 90, goals: 0, saves: 8, rate: "7.4", note: "8 сейвов · сухой матч" }] },
+    { date: "2026-11-15", home: ["Франция", "fr"], away: ["Турция", "tr"], score: "2:1", news: 22,
+      players: [{ id: 3, team: "home", min: 90, goals: 0, rate: "7.5", note: "95% выигранных отборов" }] },
+    { date: "2026-11-15", home: ["Англия", "en"], away: ["Испания", "es"], score: "3:2", news: 22,
+      players: [{ id: 6, team: "home", min: 78, goals: 1, rate: "7.8", note: "Гол с пенальти" },
+                { id: 2, team: "away", min: 45, goals: 0, rate: "6.8", note: "Один тайм" }] },
+    { date: "2026-11-13", home: ["Германия", "de"], away: ["Сербия", "rs"], score: "3:1", news: 19,
+      players: [{ id: 1, team: "home", min: 90, goals: 0, saves: 5, rate: "7.5", note: "5 сейвов" }] },
+    { date: "2026-11-13", home: ["Аргентина", "ar"], away: ["Уругвай", "uy"], score: "1:2", news: 19,
+      players: [{ id: 4, team: "home", min: 90, goals: 1, rate: "7.9", note: "Гол на 58-й минуте" }] },
+    { date: "2026-11-12", home: ["Россия", "ru"], away: ["Узбекистан", "uz"], score: "3:2", news: 14,
+      players: [{ id: 5, team: "home", min: 88, goals: 1, rate: "8.0", note: "Победный гол" }] },
+    { date: "2026-11-12", home: ["Англия", "en"], away: ["Хорватия", "hr"], score: "2:1", news: 14,
+      players: [{ id: 6, team: "home", min: 79, goals: 1, rate: "8.3", note: "Гол" }] },
+    { date: "2026-11-12", home: ["Франция", "fr"], away: ["Италия", "it"], score: "3:1", news: 14,
+      players: [{ id: 3, team: "home", min: 90, goals: 1, rate: "8.1", note: "Гол со штрафного" }] },
+    { date: "2026-11-12", home: ["Испания", "es"], away: ["Чехия", "cz"], score: "2:0", news: 14,
+      players: [{ id: 2, team: "home", min: 90, goals: 1, rate: "8.2", note: "Гол с пенальти" }] },
+  ],
+};
+
 // Ближайшие матчи FC Durum (сыгранные матчи АПЛ берутся из LEAGUE.results автоматически).
 // { date: "2026-11-20T18:00:00", tournament: "АПЛ", opponent: "FC Shegly", home: true }
 // opponent: null — соперник ещё не определён.
