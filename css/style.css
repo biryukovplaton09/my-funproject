@@ -480,3 +480,4 @@ img.comment__ava { object-fit: cover; }
 .pill--win { background: color-mix(in srgb, var(--win) 16%, transparent); color: var(--win); }
 .pill--draw { background: var(--surface-2); color: var(--muted); }
 .nt-pl .pill { font-size: .7rem; padding: 2px 8px; }
+.nt-match__comp { display: block; font-size: .72rem; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin-bottom: 8px; }

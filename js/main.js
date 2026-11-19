@@ -323,6 +323,7 @@
           <dl><div><dt>Матчи</dt><dd>${s.gp}</dd></div><div><dt>${s.saves ? "Сейвы" : "Голы"}</dt><dd>${s.saves || s.goals}</dd></div><div><dt>Мин.</dt><dd>${s.min}${s.minKnown ? "" : "+"}</dd></div><div><dt>В-Н-П</dt><dd>${s.w}-${s.d}-${s.l}</dd></div></dl></div>
           <div class="nt-card__rate"><span class="rating__num ${rc(s.avg)}">${rf(s.avg.toFixed(2))}</span><small>средняя<br>лучшая ${rf(s.best.toFixed(1))}</small></div></a>`; };
       const match = (m) => `<div class="nt-match">
+          ${m.comp ? `<span class="nt-match__comp">${esc(m.comp)}</span>` : ""}
           <div class="nt-match__score"><span>${fl(m.home)}${esc(m.home[0])}</span><b>${esc(m.score.replace(":", " : "))}</b><span>${esc(m.away[0])}${fl(m.away)}</span></div>
           ${m.players.map((x) => { const p = player(x.id) || {}; const o = outcome(m, x.team);
             return `<div class="nt-pl"><span class="nt-pl__rate ${rc(x.rate)}">${rf(x.rate)}</span>
